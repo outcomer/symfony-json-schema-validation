@@ -1,0 +1,31 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    outcomer_validation.filter_locator:
+        class: Symfony\Component\DependencyInjection\ServiceLocator
+        arguments:
+            - []
+        tags:
+            - { name: container.service_locator }
+
+    Outcomer\ValidationBundle\Schema\SchemaValidator:
+        arguments:
+            $filterLocator: '@outcomer_validation.filter_locator'
+            $schemasPath: '%outcomer_validation.schemas_path%'
+            $schemaDomain: '%outcomer_validation.schema_domain%'
+            $filterMap: '%outcomer_validation.filters%'
+
+    Outcomer\ValidationBundle\ArgumentResolver\MapRequestResolver:
+        arguments:
+            $schemasPath: '%outcomer_validation.schemas_path%'
+        tags:
+            - { name: controller.argument_value_resolver, priority: 50 }
+
+    # NelmioApiDoc integration
+    Outcomer\ValidationBundle\ApiDoc\MapRequestArgumentDescriber:
+        arguments:
+            $schemasPath: '%outcomer_validation.schemas_path%'
+        tags:
+            - { name: 'nelmio_api_doc.route_argument_describer' }

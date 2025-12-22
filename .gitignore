@@ -1,0 +1,27 @@
+# Composer
+/vendor/
+composer.lock
+PUBLISHING.md
+
+# PHPUnit
+/phpunit.xml
+/.phpunit.result.cache
+
+# PHP CS Fixer
+/.php-cs-fixer.cache
+/.php_cs.cache
+
+# IDE
+/.idea/
+/.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+/build/
+/dist/

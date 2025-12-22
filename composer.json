@@ -1,0 +1,71 @@
+{
+    "name": "outcomer/validation",
+    "description": "JSON Schema validation bundle for Symfony with OPIS integration",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "keywords": [
+        "symfony",
+        "bundle",
+        "validation",
+        "json-schema",
+        "opis",
+        "api",
+        "openapi",
+        "request-validation"
+    ],
+    "authors": [
+        {
+            "name": "David Evdoshchenko",
+            "email": "773021792e@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.4",
+        "symfony/framework-bundle": "^6.4|^7.0",
+        "symfony/dependency-injection": "^6.4|^7.0",
+        "symfony/config": "^6.4|^7.0",
+        "opis/json-schema": "^2.0"
+    },
+    "require-dev": {
+        "escapestudios/symfony2-coding-standard": "^3.15",
+        "squizlabs/php_codesniffer": "^3.13.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Outcomer\\ValidationBundle\\": "src/"
+        }
+    },
+    "scripts": {
+        "code-sniffer": [
+            "phpcs --config-set default_standard phpcs.xml",
+            "phpcs --config-set report_format summary",
+            "phpcs --config-set show_warnings 0",
+            "phpcs --config-set show_progress 1",
+            "phpcs --config-set report_width 120",
+            "phpcs --config-set colors 1",
+            "phpcs --config-set installed_paths ../../escapestudios/symfony2-coding-standard"
+        ],
+        "post-install-cmd": [
+            "@auto-scripts",
+            "@code-sniffer"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts",
+            "@code-sniffer"
+        ]
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "7.3.*"
+        },
+        "branch-alias": {
+            "dev-main": "1.0-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

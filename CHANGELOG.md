@@ -5,8 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
 ## [1.0.0] - 2024-12-22
 
 ### Added
@@ -24,9 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MIT License
 
 ### Dependencies
-- PHP >= 8.4
+- PHP >= 8.2
 - Symfony 6.4 or 7.x
 - OPIS JSON Schema 2.0
-
-[Unreleased]: https://github.com/outcomer/validation/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/outcomer/validation/releases/tag/v1.0.0

@@ -1,5 +1,5 @@
 {
-    "name": "outcomer/validation",
+    "name": "outcomer/symfony-json-schema-validation",
     "description": "JSON Schema validation bundle for Symfony with OPIS integration",
     "type": "symfony-bundle",
     "license": "MIT",
@@ -20,7 +20,7 @@
         }
     ],
     "require": {
-        "php": ">=8.4",
+        "php": ">=8.2",
         "symfony/framework-bundle": "^6.4|^7.0",
         "symfony/dependency-injection": "^6.4|^7.0",
         "symfony/config": "^6.4|^7.0",
@@ -46,12 +46,10 @@
             "phpcs --config-set installed_paths ../../escapestudios/symfony2-coding-standard"
         ],
         "post-install-cmd": [
-            "@auto-scripts",
-            "@code-sniffer"
+            "@auto-scripts"
         ],
         "post-update-cmd": [
-            "@auto-scripts",
-            "@code-sniffer"
+            "@auto-scripts"
         ]
     },
     "extra": {

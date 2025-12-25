@@ -46,12 +46,10 @@
             "phpcs --config-set installed_paths ../../escapestudios/symfony2-coding-standard"
         ],
         "post-install-cmd": [
-            "@auto-scripts",
-            "@code-sniffer"
+            "@auto-scripts"
         ],
         "post-update-cmd": [
-            "@auto-scripts",
-            "@code-sniffer"
+            "@auto-scripts"
         ]
     },
     "extra": {

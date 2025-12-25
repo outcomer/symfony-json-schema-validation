@@ -1,0 +1,26 @@
+# ========================================
+# Example Services Configuration
+# ========================================
+# This file is loaded conditionally when OUTCOMER_VALIDATION_ENABLE_EXAMPLES=true
+#
+# TO ENABLE EXAMPLES IN YOUR APPLICATION:
+# 1. Add to .env:
+#    OUTCOMER_VALIDATION_ENABLE_EXAMPLES=true
+#
+# 2. Add conditional import to config/routes.php:
+#    if (($_ENV['OUTCOMER_VALIDATION_ENABLE_EXAMPLES'] ?? 'false') === 'true') {
+#        $routes->import('../vendor/outcomer/symfony-json-schema-validation/config/routes.yaml');
+#    }
+#
+# TO DISABLE: Set OUTCOMER_VALIDATION_ENABLE_EXAMPLES=false (or remove the variable)
+# ========================================
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Auto-register all Examples classes (controllers, handlers, subscribers)
+    Outcomer\ValidationBundle\Examples\:
+        resource: '../src/Examples/'
+        exclude: '../src/Examples/schemas/'

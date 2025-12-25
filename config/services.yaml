@@ -22,10 +22,3 @@ services:
             $schemasPath: '%outcomer_validation.schemas_path%'
         tags:
             - { name: controller.argument_value_resolver, priority: 50 }
-
-    # NelmioApiDoc integration (disabled - install nelmio/api-doc-bundle to enable)
-    # Outcomer\ValidationBundle\ApiDoc\MapRequestArgumentDescriber:
-    #     arguments:
-    #         $schemasPath: '%outcomer_validation.schemas_path%'
-    #     tags:
-    #         - { name: 'nelmio_api_doc.route_argument_describer' }

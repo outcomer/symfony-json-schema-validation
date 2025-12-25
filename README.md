@@ -32,8 +32,8 @@ Define validation rules once in JSON Schema → Get automatic request validation
 
 ## Requirements
 
-- PHP 8.4 or higher
-- Symfony 6.4 or 7.x
+- PHP 8.2 or higher
+- Symfony 7.4 or higher
 - OPIS JSON Schema 2.0
 
 ## Installation
@@ -41,7 +41,7 @@ Define validation rules once in JSON Schema → Get automatic request validation
 Install the bundle via Composer:
 
 ```bash
-composer require outcomer/validation
+composer require outcomer/symfony-json-schema-validation
 ```
 
 If you're not using Symfony Flex, register the bundle manually in `config/bundles.php`:
@@ -52,12 +52,9 @@ return [
     Outcomer\ValidationBundle\OutcomerValidationBundle::class => ['all' => true],
 ];
 ```
-
 ## Configuration
 
-> **Note**: The Symfony Flex recipe is pending publication to symfony/recipes-contrib. Until then, you need to create the configuration file manually.
-
-### Manual Configuration (Required for now)
+### Manual Configuration
 
 Create a configuration file `config/packages/outcomer_validation.yaml`:
 
@@ -83,9 +80,42 @@ outcomer_validation:
 | `schema_domain` | string | `https://example.com` | Base URL for auto-generated schema IDs (used by OPIS for schema resolution) |
 | `filters` | array | `[]` | Map of custom filter names to their service classes |
 
-### Future: Automatic Configuration
+### Automatic Configuration
 
-Once the Symfony Flex recipe is published to symfony/recipes-contrib, the configuration file will be created automatically during installation. You can track the progress in the [Contributing](#contributing) section.
+In case Symfony Flex used in Your App the configuration file will be created automatically during installation.
+
+## Examples
+
+The bundle includes working examples (controllers, exception handlers, and schemas) to help you get started quickly.
+
+**📁 All examples are located in:** [`src/Examples/`](src/Examples/)
+
+### Enabling Examples
+
+1. Add to your `.env` file:
+```env
+OUTCOMER_VALIDATION_ENABLE_EXAMPLES=true
+```
+
+2. Add conditional route import to `config/routes.php`:
+```php
+use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+
+return function (RoutingConfigurator $routes) {
+    $routes->import('../src/Controller/', 'attribute');
+
+    // Outcomer Validation Bundle - Examples
+    if (($_ENV['OUTCOMER_VALIDATION_ENABLE_EXAMPLES'] ?? 'false') === 'true') {
+        $routes->import('../vendor/outcomer/symfony-json-schema-validation/config/routes.yaml');
+    }
+};
+```
+
+Example routes will be available at:
+- `POST /_examples/validation/user` - User creation with validation
+- `GET /_examples/validation/info` - Schema information
+
+**Note:** Examples are for development/testing only. Set `OUTCOMER_VALIDATION_ENABLE_EXAMPLES=false` in production.
 
 ## Usage
 
@@ -138,9 +168,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/api/users', methods: ['POST'])]
-public function createUser(
-    #[MapRequest('user-create.json')] Request $request
-): JsonResponse {
+public function createUser(#[MapRequest('user-create.json')] Request $request): JsonResponse
+{
     // Access validated data
     $payload = $request->getPayload();
     $body = $payload->getBody();    // stdClass with validated body data
@@ -163,9 +192,8 @@ If you want to collect validation errors without throwing exceptions:
 
 ```php
 #[Route('/api/users', methods: ['POST'])]
-public function createUser(
-    #[MapRequest('user-create.json', die: false)] Request $request
-): JsonResponse {
+public function createUser(#[MapRequest('user-create.json', die: false)] Request $request): JsonResponse
+{
     if ($request->hasViolations()) {
         return new JsonResponse([
             'errors' => $request->getViolations()
@@ -226,10 +254,7 @@ class UuidFilter implements Filter
 
     public function validate($data, array $args): bool
     {
-        return preg_match(
-            '/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i',
-            $data
-        ) === 1;
+        return preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i', $data) === 1;
     }
 }
 ```
@@ -281,10 +306,8 @@ With this controller:
 
 ```php
 #[Route('/api/users/{id}', methods: ['PUT'])]
-public function updateUser(
-    #[MapRequest('user-update.json')] Request $request,
-    int $id
-): JsonResponse {
+public function updateUser(#[MapRequest('user-update.json')] Request $request, int $id): JsonResponse
+{
     // ...
 }
 ```
@@ -295,9 +318,60 @@ The Swagger UI will automatically display:
 - Field descriptions
 - Example values
 
-## Error Response Format
+## Error Handling
 
-When validation fails (with `die: true`, which is the default), the bundle throws a `ValidationException` with this format:
+When validation fails (with `die: true`, which is the default), the bundle throws a `ValidationException`.
+
+**Important:** The bundle only throws the exception - you are responsible for handling it and converting it to an HTTP response.
+
+### Exception Structure
+
+```php
+use Outcomer\ValidationBundle\Exception\ValidationException;
+
+try {
+    // Validation happens automatically via MapRequest attribute
+} catch (ValidationException $e) {
+    $message = $e->getMessage();              // "Request data is invalid"
+    $errors = $e->getValidationErrors();      // Array of error details
+    $statusCode = $e->getStatusCode();        // 400
+}
+```
+
+### Handling Validation Exceptions
+
+You can handle exceptions using Symfony's exception listener:
+
+```php
+use Outcomer\ValidationBundle\Exception\ValidationException;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
+
+#[AsEventListener(event: KernelEvents::EXCEPTION)]
+class ExceptionListener
+{
+    public function __invoke(ExceptionEvent $event): void
+    {
+        $exception = $event->getThrowable();
+
+        if ($exception instanceof ValidationException) {
+            $response = new JsonResponse(
+                data: [
+                    'message' => $exception->getMessage(),
+                    'errors' => $exception->getValidationErrors(),
+                ],
+                status: $exception->getStatusCode()
+            );
+
+            $event->setResponse($response);
+        }
+    }
+}
+```
+
+**Error response format example:**
 
 ```json
 {
@@ -310,6 +384,8 @@ When validation fails (with `die: true`, which is the default), the bundle throw
     ]
 }
 ```
+
+**See complete implementation:** [`src/Examples/Subscriber/ExceptionListener.php`](src/Examples/Subscriber/ExceptionListener.php)
 
 ## Type Casting
 
@@ -341,9 +417,9 @@ use Outcomer\ValidationBundle\Schema\SchemaValidator;
 
 class MyService
 {
-    public function __construct(
-        private SchemaValidator $validator
-    ) {}
+    public function __construct(private SchemaValidator $validator
+    {
+    }
 
     public function validateData(array $data): void
     {
@@ -376,32 +452,11 @@ class UserCreateDTO
 
 // In controller:
 #[Route('/api/users', methods: ['POST'])]
-public function createUser(
-    #[MapRequest('user-create.json')] UserCreateDTO $dto
-): JsonResponse {
+public function createUser(#[MapRequest('user-create.json')] UserCreateDTO $dto): JsonResponse
+{
     // ...
 }
 ```
-
-## Testing
-
-Run PHP_CodeSniffer to check code standards:
-
-```bash
-composer code-sniffer
-```
-
-## Versioning
-
-This project uses [Semantic Versioning](https://semver.org/). Versions are managed through Git tags:
-
-```bash
-# Create a version tag
-git tag -a v1.0.0 -m "Release version 1.0.0"
-git push origin v1.0.0
-```
-
-After pushing the tag, Packagist will automatically detect the new version.
 
 ## Contributing
 
@@ -412,17 +467,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
-### Publishing Symfony Flex Recipe
-
-To enable automatic configuration when installing via Composer, the bundle includes a Flex recipe in the `recipes/` directory. To make it available to all Symfony users:
-
-1. Fork the [symfony/recipes-contrib](https://github.com/symfony/recipes-contrib) repository
-2. Create a directory: `outcomer/validation/1.0/`
-3. Copy files from `recipes/` to that directory
-4. Submit a Pull Request to symfony/recipes-contrib
-
-Once merged, users will automatically get the configuration file when installing the bundle with Symfony Flex.
 
 ## License
 

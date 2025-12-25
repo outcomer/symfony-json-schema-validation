@@ -1,0 +1,4 @@
+# Example routes - only active when OUTCOMER_VALIDATION_ENABLE_EXAMPLES=true
+_outcomer_validation_examples:
+    resource: ../src/Examples/Controller/
+    type: attribute

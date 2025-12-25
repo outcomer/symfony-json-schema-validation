@@ -1,0 +1,30 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "body": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 100,
+                    "description": "User's full name"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "User's email address"
+                },
+                "age": {
+                    "type": "integer",
+                    "minimum": 18,
+                    "maximum": 120,
+                    "description": "User's age (optional)"
+                }
+            },
+            "required": ["name", "email"],
+            "additionalProperties": false
+        }
+    }
+}

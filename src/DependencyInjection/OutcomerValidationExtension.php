@@ -40,6 +40,12 @@ final class OutcomerValidationExtension extends Extension
 		$container->setParameter(name: 'outcomer_validation.schema_domain', value: $config['schema_domain']);
 		$container->setParameter(name: 'outcomer_validation.filters', value: $config['filters']);
 
+		// Load examples services if enabled via environment variable
+		$enableExamples = ($_ENV['OUTCOMER_VALIDATION_ENABLE_EXAMPLES'] ?? 'false') === 'true';
+		if ($enableExamples) {
+			$loader->load(resource: 'services_examples.yaml');
+		}
+
 		// Create ServiceLocator with filters
 		$filterReferences = [];
 		foreach ($config['filters'] as $filterName => $filterConfig) {
@@ -49,5 +55,15 @@ final class OutcomerValidationExtension extends Extension
 
 		$filterLocatorDefinition = $container->getDefinition('outcomer_validation.filter_locator');
 		$filterLocatorDefinition->setArguments([$filterReferences]);
+
+		// Register NelmioApiDoc integration if bundle is installed
+		if (class_exists('Nelmio\ApiDocBundle\NelmioApiDocBundle')) {
+			$container
+				->register('outcomer_validation.api_doc_describer', 'Outcomer\ValidationBundle\ApiDoc\MapRequestArgumentDescriber')
+				->setAutowired(true)
+				->setAutoconfigured(true)
+				->setArgument('$schemasPath', '%outcomer_validation.schemas_path%')
+				->addTag('nelmio_api_doc.route_argument_describer');
+		}
 	}
 }

@@ -27,6 +27,11 @@ final class Schema
 	 */
 	public function findSchemaFile(string $fileName, ?string $currentSchemaPath = null): string
 	{
+		// Try as absolute path first
+		if (file_exists($fileName)) {
+			return $fileName;
+		}
+
 		// Try relative to schemas path
 		$refPath = "{$this->schemasPath}/$fileName";
 		if (file_exists($refPath)) {

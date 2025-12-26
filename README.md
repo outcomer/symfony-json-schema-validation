@@ -2,8 +2,8 @@
 
 A Symfony bundle for JSON Schema validation of HTTP requests with OPIS integration and automatic OpenAPI documentation generation.
 
-[![PHP Version](https://img.shields.io/badge/php-%3E%3D8.4-blue.svg)](https://php.net/)
-[![Symfony Version](https://img.shields.io/badge/symfony-6.4%20%7C%207.x-green.svg)](https://symfony.com/)
+[![PHP Version](https://img.shields.io/badge/php->=8.2-blue.svg)](https://php.net/)
+[![Symfony Version](https://img.shields.io/badge/symfony-%3E7.4-green.svg)](https://symfony.com/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ## Why?

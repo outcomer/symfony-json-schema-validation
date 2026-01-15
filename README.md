@@ -2,8 +2,13 @@
 
 A Symfony bundle for JSON Schema validation of HTTP requests with OPIS integration and automatic OpenAPI documentation generation.
 
+[![CI](https://github.com/outcomer/symfony-json-schema-validation/workflows/CI/badge.svg)](https://github.com/outcomer/symfony-json-schema-validation/actions)
+[![Coding Standards](https://github.com/outcomer/symfony-json-schema-validation/workflows/Coding%20Standards/badge.svg)](https://github.com/outcomer/symfony-json-schema-validation/actions)
+[![Security](https://github.com/outcomer/symfony-json-schema-validation/workflows/Security/badge.svg)](https://github.com/outcomer/symfony-json-schema-validation/actions)
+[![Latest Stable Version](https://poser.pugx.org/outcomer/symfony-json-schema-validation/v)](https://packagist.org/packages/outcomer/symfony-json-schema-validation)
+[![Total Downloads](https://poser.pugx.org/outcomer/symfony-json-schema-validation/downloads)](https://packagist.org/packages/outcomer/symfony-json-schema-validation)
 [![PHP Version](https://img.shields.io/badge/php->=8.2-blue.svg)](https://php.net/)
-[![Symfony Version](https://img.shields.io/badge/symfony-%3E7.4-green.svg)](https://symfony.com/)
+[![Symfony Version](https://img.shields.io/badge/symfony-7.4-green.svg)](https://symfony.com/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ## Why?
@@ -458,15 +463,53 @@ public function createUser(#[MapRequest('user-create.json')] UserCreateDTO $dto)
 }
 ```
 
+## Testing
+
+The bundle includes a comprehensive test suite.
+
+### Running Tests
+
+```bash
+# Run all tests
+composer test
+
+# Run tests with code coverage (Windows PowerShell)
+composer test-coverage:win
+
+# Run tests with code coverage (Linux/Mac)
+composer test-coverage:unix
+
+# Check coding standards
+composer cs-check
+
+# Auto-fix coding standards
+composer cs-fix
+```
+
+**Note:** Code coverage requires Xdebug extension. The `test-coverage:win` and `test-coverage:unix` commands automatically set the correct Xdebug mode.
+
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct, development process, and how to submit pull requests.
+
+### Quick Start for Contributors
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Clone your fork: `git clone https://github.com/YOUR-USERNAME/symfony-json-schema-validation.git`
+3. Install dependencies: `composer install`
+4. Create a feature branch: `git checkout -b feature/amazing-feature`
+5. Make your changes and add tests
+6. Run tests: `composer test`
+7. Check coding standards: `composer cs-check`
+8. Commit your changes: `git commit -m 'feat: add amazing feature'`
+9. Push to your fork: `git push origin feature/amazing-feature`
+10. Open a Pull Request
+
+## Security
+
+Security vulnerabilities should be reported privately to **773021792e@gmail.com**. Please do not report security vulnerabilities through public GitHub issues.
+
+For more information, see our [Security Policy](SECURITY.md)
 
 ## License
 

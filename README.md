@@ -25,7 +25,7 @@ This creates maintenance overhead and potential inconsistencies between what the
 Define validation rules once in JSON Schema → Get automatic request validation + accurate OpenAPI documentation.
 
 > [!NOTE]
-> *Yes, Symfony has built-in efficient validation methods, the framework has strong serialization and deserialization > mechanisms. Additionally, there is FOSRestBundle which can directly transform payload into models, and there is the entire API Platform. All of these can also be used for validation and creating API specifications. But in real life, there are often projects where business requirements are not defined, the data architecture is not precisely known, and the application must work by tomorrow, preferably without errors. In this case, the JSON Schema specification and this package come to the rescue. It violates some architectural principles, but it solves its task.*
+> *Yes, Symfony has built-in efficient validation methods, the framework has strong serialization and deserialization mechanisms. Additionally, there is FOSRestBundle which can directly transform payload into models, and there is the entire API Platform. All of these can also be used for validation and creating API specifications. But in real life, there are often projects where business requirements are not defined, the data architecture is not precisely known, and the application must work by tomorrow, preferably without errors. In this case, the JSON Schema specification and this package come to the rescue. It violates some architectural principles, but it solves its task.*
 
 ## Features
 

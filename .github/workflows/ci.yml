@@ -8,7 +8,7 @@ on:
 
 jobs:
   tests:
-    name: Tests PHP ${{ matrix.php-version }} - Symfony ${{ matrix.symfony-version }}
+    name: Tests PHP ${{ matrix.php-version }} - Symfony ${{ matrix.symfony-version }} (${{ matrix.dependency-version }})
     runs-on: ubuntu-latest
 
     strategy:

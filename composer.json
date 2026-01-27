@@ -50,6 +50,8 @@
         "test-coverage": "phpunit --coverage-html build/coverage",
         "test-coverage:win": "powershell -Command \"$env:XDEBUG_MODE='coverage'; vendor/bin/phpunit --coverage-html build/coverage\"",
         "test-coverage:unix": "XDEBUG_MODE=coverage phpunit --coverage-html build/coverage",
+        "cs-check": "vendor/bin/phpcs --report=full",
+        "cs-fix": "vendor/bin/phpcbf",
         "code-sniffer": [
             "phpcs --config-set default_standard phpcs.xml",
             "phpcs --config-set report_format summary",
@@ -59,8 +61,6 @@
             "phpcs --config-set colors 1",
             "phpcs --config-set installed_paths ../../escapestudios/symfony2-coding-standard"
         ],
-        "cs-check": "vendor/bin/phpcs --report=full",
-        "cs-fix": "vendor/bin/phpcbf",
         "post-install-cmd": [
             "@code-sniffer"
         ],

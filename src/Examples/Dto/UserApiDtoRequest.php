@@ -20,12 +20,8 @@ use Outcomer\ValidationBundle\Model\ValidatedDtoInterface;
  */
 readonly class UserApiDtoRequest implements ValidatedDtoInterface
 {
-    public function __construct(
-        public string $name,
-        public string $email,
-        public ?int $age = null,
-        public array $violations = []
-    ) {
+    public function __construct(public string $name, public string $email, public ?int $age = null, public array $violations = [])
+    {
     }
 
     /**

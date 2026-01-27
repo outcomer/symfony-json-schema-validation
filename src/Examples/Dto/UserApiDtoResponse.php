@@ -19,22 +19,11 @@ use OpenApi\Attributes as OA;
  */
 final readonly class UserApiDtoResponse
 {
+    // phpcs:ignore Symfony.Functions.Arguments.Invalid
     public function __construct(
-        #[OA\Property(
-            description: "User's full name",
-            example: 'John Doe'
-        )]
-        public string $name,
-        #[OA\Property(
-            description: "User's email address",
-            example: 'john.doe@example.com'
-        )]
-        public string $email,
-        #[OA\Property(
-            description: "User's age",
-            example: 30
-        )]
-        public ?int $age = null
+        #[OA\Property(description: "User's full name", example: 'John Doe')] public string $name,
+        #[OA\Property(description: "User's email address", example: 'john.doe@example.com')] public string $email,
+        #[OA\Property(description: "User's age", example: 30)] public ?int $age = null
     ) {
     }
 

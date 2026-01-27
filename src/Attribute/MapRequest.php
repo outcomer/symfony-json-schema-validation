@@ -28,11 +28,8 @@ final class MapRequest extends ValueResolver
     /**
      * Creates a validated request attribute
      */
-    public function __construct(
-        public readonly string $schema,
-        string $resolver = MapRequestResolver::class,
-        public readonly bool $triggerResponse = true
-    ) {
+    public function __construct(public readonly string $schema, string $resolver = MapRequestResolver::class, public readonly bool $triggerResponse = true)
+    {
         parent::__construct($resolver);
     }
 }

@@ -1,13 +1,11 @@
 # Composer
 /vendor/
-composer.lock
 
 # Node.js / VitePress
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-package-lock.json
 
 # Build output
 build/

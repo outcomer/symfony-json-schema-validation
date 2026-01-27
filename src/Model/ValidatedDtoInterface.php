@@ -20,8 +20,8 @@ interface ValidatedDtoInterface
     /**
      * Creates DTO instance from validated payload
      *
-     * @param Payload $payload    The validated request payload
-     * @param array   $violations Validation violations if any
+     * @param Payload $payload    The validated request payload.
+     * @param array   $violations Validation violations if any.
      *
      * @return static
      */

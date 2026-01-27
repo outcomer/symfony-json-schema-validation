@@ -23,15 +23,15 @@ A powerful and flexible JSON Schema validation solution for Symfony applications
 
 ### Quick Links
 
-- [� How It Works](https://outcomer.github.io/symfony-json-schema-validation/guide/how-it-works)
-- [🏗 Installation Guide](https://outcomer.github.io/symfony-json-schema-validation/guide/installation)
-- [⚡ Quick Start Tutorial](https://outcomer.github.io/symfony-json-schema-validation/guide/quick-start)
-- [📐 Schema Basics](https://outcomer.github.io/symfony-json-schema-validation/guide/schema-basics)
-- [🔧 Configuration Options](https://outcomer.github.io/symfony-json-schema-validation/guide/configuration)
-- [💉 DTO Injection](https://outcomer.github.io/symfony-json-schema-validation/guide/dto-injection)
+- [🔗 How It Works](https://outcomer.github.io/symfony-json-schema-validation/guide/how-it-works)
+- [🔗 Installation Guide](https://outcomer.github.io/symfony-json-schema-validation/guide/installation)
+- [🔗 Quick Start Tutorial](https://outcomer.github.io/symfony-json-schema-validation/guide/quick-start)
+- [🔗 Schema Basics](https://outcomer.github.io/symfony-json-schema-validation/guide/schema-basics)
+- [🔗 Configuration Options](https://outcomer.github.io/symfony-json-schema-validation/guide/configuration)
+- [🔗 DTO Injection](https://outcomer.github.io/symfony-json-schema-validation/guide/dto-injection)
 - [🔗 OpenAPI Integration](https://outcomer.github.io/symfony-json-schema-validation/guide/openapi-integration)
-- [📚 Examples](https://outcomer.github.io/symfony-json-schema-validation/examples/)
-- [📋 API Reference](https://outcomer.github.io/symfony-json-schema-validation/api/)
+- [🔗 Examples](https://outcomer.github.io/symfony-json-schema-validation/examples/)
+- [🔗 API Reference](https://outcomer.github.io/symfony-json-schema-validation/api/)
 
 ## ⚡ Quick Start
 

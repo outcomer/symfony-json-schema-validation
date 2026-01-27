@@ -23,4 +23,4 @@ services:
     # Auto-register all Examples classes (controllers, handlers, subscribers)
     Outcomer\ValidationBundle\Examples\:
         resource: '../src/Examples/'
-        exclude: '../src/Examples/schemas/'
+        exclude: '../src/Examples/Schemas/'

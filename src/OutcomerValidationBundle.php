@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Outcomer Symfony Validation package.
  *
@@ -20,11 +21,11 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 final class OutcomerValidationBundle extends Bundle
 {
-	/**
-	 * Gets the container extension for bundle configuration
-	 */
-	public function getContainerExtension(): ?ExtensionInterface
-	{
-		return new OutcomerValidationExtension();
-	}
+    /**
+     * Gets the container extension for bundle configuration
+     */
+    public function getContainerExtension(): ?ExtensionInterface
+    {
+        return new OutcomerValidationExtension();
+    }
 }

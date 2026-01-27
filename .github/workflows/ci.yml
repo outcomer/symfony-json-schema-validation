@@ -8,23 +8,21 @@ on:
 
 jobs:
   tests:
-    name: Tests PHP ${{ matrix.php-version }} - Symfony ${{ matrix.symfony-version }}
+    name: Tests PHP ${{ matrix.php-version }} - Symfony ${{ matrix.symfony-version }} (${{ matrix.dependency-version }})
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
         php-version:
-          - '8.2'
-          - '8.3'
           - '8.4'
         symfony-version:
-          - '7.4.*'
+          - '8.0.*'
         dependency-version:
           - 'prefer-stable'
         include:
-          - php-version: '8.3'
-            symfony-version: '7.4.*'
+          - php-version: '8.4'
+            symfony-version: '8.0.*'
             dependency-version: 'prefer-lowest'
 
     steps:
@@ -60,33 +58,4 @@ jobs:
 
       - name: Run code sniffer
         run: composer cs-check
-        if: matrix.php-version == '8.3' && matrix.dependency-version == 'prefer-stable'
-
-  coverage:
-    name: Code Coverage
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: json, mbstring
-          coverage: pcov
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
-
-      - name: Run tests with coverage
-        run: composer test-coverage
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          files: ./build/logs/clover.xml
-          fail_ci_if_error: false
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        if: matrix.php-version == '8.4' && matrix.dependency-version == 'prefer-stable'

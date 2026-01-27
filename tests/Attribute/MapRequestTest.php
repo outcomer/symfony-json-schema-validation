@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Outcomer Symfony Validation package.
  *
@@ -20,27 +21,27 @@ use PHPUnit\Framework\TestCase;
  */
 final class MapRequestTest extends TestCase
 {
-	public function testMapRequestWithDefaultParameters(): void
-	{
-		$attribute = new MapRequest('user-create.json');
+    public function testMapRequestWithDefaultParameters(): void
+    {
+        $attribute = new MapRequest('user-create.json');
 
-		$this->assertSame('user-create.json', $attribute->schema);
-		$this->assertTrue($attribute->die);
-	}
+        $this->assertSame('user-create.json', $attribute->schema);
+        $this->assertTrue($attribute->triggerResponse);
+    }
 
-	public function testMapRequestWithCustomParameters(): void
-	{
-		$attribute = new MapRequest('user-update.json', MapRequestResolver::class, false);
+    public function testMapRequestWithCustomParameters(): void
+    {
+        $attribute = new MapRequest('user-update.json', MapRequestResolver::class, false);
 
-		$this->assertSame('user-update.json', $attribute->schema);
-		$this->assertFalse($attribute->die);
-	}
+        $this->assertSame('user-update.json', $attribute->schema);
+        $this->assertFalse($attribute->triggerResponse);
+    }
 
-	public function testMapRequestIsAttribute(): void
-	{
-		$reflection = new \ReflectionClass(MapRequest::class);
-		$attributes = $reflection->getAttributes(\Attribute::class);
+    public function testMapRequestIsAttribute(): void
+    {
+        $reflection = new \ReflectionClass(MapRequest::class);
+        $attributes = $reflection->getAttributes(\Attribute::class);
 
-		$this->assertNotEmpty($attributes);
-	}
+        $this->assertNotEmpty($attributes);
+    }
 }

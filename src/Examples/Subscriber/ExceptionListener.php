@@ -31,20 +31,20 @@ use Symfony\Component\HttpKernel\KernelEvents;
 #[AsEventListener(event: KernelEvents::EXCEPTION, method: 'handleException', priority: 0)]
 class ExceptionListener
 {
-	public function __construct(private readonly ValidationExceptionHandler $validationBundleHandler)
-	{
-	}
+    public function __construct(private readonly ValidationExceptionHandler $validationBundleHandler)
+    {
+    }
 
-	/**
-	 * Delegates exception handling to the appropriate handler.
-	 */
-	public function handleException(ExceptionEvent $event): void
-	{
-		$exception = $event->getThrowable();
+    /**
+     * Delegates exception handling to the appropriate handler.
+     */
+    public function handleException(ExceptionEvent $event): void
+    {
+        $exception = $event->getThrowable();
 
-		match (true) {
-			$exception instanceof ValidationException  => $this->validationBundleHandler->handleValidationBundleException($exception, $event),
-			default => null,
-		};
-	}
+        match (true) {
+            $exception instanceof ValidationException  => $this->validationBundleHandler->handleValidationBundleException($exception, $event),
+            default => null,
+        };
+    }
 }

@@ -2,6 +2,35 @@
     "$schema": "https://json-schema.org/draft-07/schema#",
     "type": "object",
     "properties": {
+        "query": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+        },
+        "headers": {
+            "type": "object",
+            "properties": {
+                "authorization": {
+                    "type": "string",
+                    "description": "Bearer token for authentication",
+                    "pattern": "^Bearer .+",
+                    "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                },
+                "x-api-version": {
+                    "type": "string",
+                    "description": "API version",
+                    "enum": ["v1", "v2"],
+                    "example": "v1"
+                },
+                "content-type": {
+                    "type": "string",
+                    "description": "Request content type",
+                    "enum": ["application/json"],
+                    "example": "application/json"
+                }
+            },
+            "additionalProperties": true
+        },
         "body": {
             "type": "object",
             "properties": {
@@ -9,18 +38,21 @@
                     "type": "string",
                     "minLength": 3,
                     "maxLength": 100,
-                    "description": "User's full name"
+                    "description": "User's full name",
+                    "example": "Jane Smith"
                 },
                 "email": {
                     "type": "string",
                     "format": "email",
-                    "description": "User's email address"
+                    "description": "User's email address",
+                    "example": "john.doe@example.com"
                 },
                 "age": {
                     "type": "integer",
-                    "minimum": 18,
-                    "maximum": 120,
-                    "description": "User's age (optional)"
+                    "minimum": 21,
+                    "maximum": 100,
+                    "description": "User's age (optional)",
+                    "example": 30
                 }
             },
             "required": ["name", "email"],

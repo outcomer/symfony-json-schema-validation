@@ -1,7 +1,19 @@
 # Composer
 /vendor/
 composer.lock
-PUBLISHING.md
+
+# Node.js / VitePress
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Build output
+build/
+dist/
+docs/.vitepress/dist/
+docs/.vitepress/cache/
 
 # PHPUnit
 /phpunit.xml
@@ -22,7 +34,3 @@ PUBLISHING.md
 # OS
 .DS_Store
 Thumbs.db
-
-# Build artifacts
-/build/
-/dist/

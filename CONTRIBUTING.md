@@ -1,216 +1,204 @@
-# Contributing to Outcomer Validation Bundle
+# Contributing to Symfony JSON Schema Validation Bundle
 
-Thank you for considering contributing to the Outcomer Validation Bundle! This document provides guidelines and instructions for contributing.
+Thank you for considering contributing to this project! We welcome contributions from everyone.
 
-## Table of Contents
-
-- [Code of Conduct](#code-of-conduct)
-- [Getting Started](#getting-started)
-- [Development Setup](#development-setup)
-- [Making Changes](#making-changes)
-- [Testing](#testing)
-- [Coding Standards](#coding-standards)
-- [Submitting Changes](#submitting-changes)
-
-## Code of Conduct
-
-This project adheres to a code of conduct. By participating, you are expected to uphold this code. Please be respectful and constructive in all interactions.
-
-## Getting Started
-
-1. **Fork the repository** on GitHub
-2. **Clone your fork** locally:
-   ```bash
-   git clone https://github.com/YOUR-USERNAME/symfony-json-schema-validation.git
-   cd symfony-json-schema-validation
-   ```
-3. **Add upstream remote**:
-   ```bash
-   git remote add upstream https://github.com/outcomer/symfony-json-schema-validation.git
-   ```
-
-## Development Setup
+## 📋 Development Setup
 
 ### Prerequisites
 
-- PHP 8.2 or higher
-- Composer 2.x
+- PHP 8.4+
+- Composer
 - Git
+- Node.js 18+ (for documentation)
 
-### Install Dependencies
+### Local Development
 
 ```bash
+# Clone the repository
+git clone https://github.com/outcomer/symfony-json-schema-validation.git
+cd symfony-json-schema-validation
+
+# Install dependencies
 composer install
+
+# Run tests
+./bin/phpunit
+
+# Run code style checks
+./vendor/bin/phpcs
+
+# Fix code style automatically
+./vendor/bin/phpcbf
 ```
 
-### Running Examples
-
-The bundle includes working examples. To enable them:
-
-1. Set environment variable:
-   ```bash
-   OUTCOMER_VALIDATION_ENABLE_EXAMPLES=true
-   ```
-
-2. The examples are located in `src/Examples/`
-
-## Making Changes
-
-### Creating a Branch
-
-Create a new branch for your feature or bugfix:
+### Documentation Development
 
 ```bash
-git checkout -b feature/my-new-feature
-# or
-git checkout -b bugfix/issue-123
+# Install documentation dependencies
+npm install
+
+# Start development server
+npm run docs:dev
+
+# Build static documentation
+npm run docs:build
 ```
 
-### Branch Naming Convention
+## 🔧 Development Guidelines
 
-- `feature/` - New features
-- `bugfix/` - Bug fixes
-- `docs/` - Documentation changes
-- `refactor/` - Code refactoring
-- `test/` - Adding or updating tests
+### Code Style
 
-## Testing
+- Follow PSR-12 coding standards
+- Use 4 spaces for indentation (not tabs)
+- Keep line length under 120 characters
+- Use type hints and return types
+- Add DocBlocks for public methods and classes
 
-### Running Tests
+### Testing
 
-Run the full test suite:
+- Write unit tests for new functionality
+- Ensure all tests pass before submitting PR
+- Aim for high test coverage
+- Use meaningful test names that describe what is being tested
+
+### Commit Guidelines
+
+Follow [Conventional Commits](https://www.conventionalcommits.org/) format:
+
+```
+type(scope): description
+
+[optional body]
+
+[optional footer]
+```
+
+**Types:**
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, etc.)
+- `refactor`: Code refactoring
+- `test`: Adding or updating tests
+- `ci`: CI/CD changes
+
+**Examples:**
+```
+feat(validation): add headers validation support
+fix(resolver): handle empty query schemas correctly
+docs(readme): update installation instructions
+```
+
+## 🚀 Contributing Process
+
+### 1. Fork and Clone
 
 ```bash
-composer test
+# Fork the repository on GitHub
+# Then clone your fork
+git clone https://github.com/YOUR_USERNAME/symfony-json-schema-validation.git
 ```
 
-### Running Tests with Coverage
-
-Generate code coverage report:
+### 2. Create Feature Branch
 
 ```bash
-composer test-coverage
+git checkout -b feature/your-feature-name
 ```
 
-Coverage report will be generated in `build/coverage/index.html`
+### 3. Make Changes
 
-### Writing Tests
+- Write your code
+- Add/update tests
+- Update documentation if needed
+- Run tests and code style checks
 
-- Place tests in the `tests/` directory
-- Follow the same namespace structure as `src/`
-- Test class names should end with `Test`
-- Use descriptive test method names with `test` prefix
+### 4. Submit Pull Request
 
-Example:
+1. Push your changes to your fork
+2. Create a Pull Request against the main branch
+3. Fill out the PR template
+4. Wait for review
 
-```php
-<?php
-namespace Outcomer\ValidationBundle\Tests\Helpers;
+### Pull Request Requirements
 
-use PHPUnit\Framework\TestCase;
+- [ ] All tests pass
+- [ ] Code follows project style guidelines
+- [ ] New features have tests
+- [ ] Documentation is updated (if applicable)
+- [ ] Commit messages follow conventional format
+- [ ] PR description explains the changes
 
-final class ArraysTest extends TestCase
-{
-    public function testGetNestedValueReturnsCorrectValue(): void
-    {
-        // Test implementation
-    }
-}
+## 🐛 Reporting Issues
+
+### Bug Reports
+
+When reporting bugs, please include:
+
+1. **Clear description** of the issue
+2. **Steps to reproduce** the problem
+3. **Expected behavior** vs actual behavior
+4. **Environment details** (PHP version, Symfony version, etc.)
+5. **Code samples** or screenshots if relevant
+
+### Feature Requests
+
+For new features, please:
+
+1. **Check existing issues** to avoid duplicates
+2. **Explain the use case** and why it's needed
+3. **Provide examples** of how it would work
+4. **Consider backwards compatibility**
+
+## 📚 Documentation Contributions
+
+Documentation improvements are always welcome:
+
+- Fix typos or unclear explanations
+- Add examples and use cases
+- Improve API documentation
+- Translate documentation (future)
+
+### Documentation Structure
+
+```
+docs/
+├── .vitepress/          # VitePress configuration
+├── index.md            # Homepage
+├── guide/              # User guides
+│   ├── installation.md
+│   ├── quick-start.md
+│   ├── configuration.md
+│   ├── advanced.md
+│   └── openapi.md
+└── api/                # API reference
+    └── index.md
 ```
 
-## Coding Standards
+## 🔄 Release Process
 
-This project follows [Symfony Coding Standards](https://symfony.com/doc/current/contributing/code/standards.html).
+Releases are automated via GitHub Actions:
 
-### Check Coding Standards
+1. Update version in `composer.json`
+2. Update CHANGELOG.md
+3. Create a new tag
+4. Push to main branch
+5. GitHub Actions will create the release
 
-```bash
-composer cs-check
-```
+## 💬 Communication
 
-### Fix Coding Standards
+- **GitHub Issues**: Bug reports and feature requests
+- **GitHub Discussions**: Questions and general discussion
+- **Pull Requests**: Code contributions
 
-```bash
-composer cs-fix
-```
+## 📜 Code of Conduct
 
-### Key Standards
+We're committed to providing a welcoming and inclusive environment for all contributors. Please be respectful and professional in all interactions.
 
-- Use PHP 8.2+ features (typed properties, constructor property promotion, etc.)
-- Use `declare(strict_types=1);` in all PHP files
-- Use meaningful variable and method names
-- Add PHPDoc blocks for classes and methods
-- Keep methods focused and small
-- Follow PSR-12 coding style
+## 🙏 Recognition
 
-## Submitting Changes
+Contributors will be:
+- Listed in CONTRIBUTORS.md
+- Mentioned in release notes for significant contributions
+- Given appropriate credit in documentation
 
-### Before Submitting
-
-1. **Ensure tests pass**:
-   ```bash
-   composer test
-   ```
-
-2. **Check coding standards**:
-   ```bash
-   composer cs-check
-   ```
-
-3. **Update documentation** if needed
-
-4. **Update CHANGELOG.md** following [Keep a Changelog](https://keepachangelog.com/) format
-
-### Creating a Pull Request
-
-1. **Push your changes** to your fork:
-   ```bash
-   git push origin feature/my-new-feature
-   ```
-
-2. **Create a Pull Request** on GitHub
-
-3. **Fill in the PR template** with:
-   - Clear description of changes
-   - Reference to related issues
-   - Screenshots (if UI changes)
-   - Checklist of completed tasks
-
-### Pull Request Guidelines
-
-- **One feature per PR** - Keep changes focused
-- **Write clear commit messages** - Use conventional commits format:
-  - `feat:` - New feature
-  - `fix:` - Bug fix
-  - `docs:` - Documentation changes
-  - `test:` - Adding tests
-  - `refactor:` - Code refactoring
-
-- **Keep commits atomic** - Each commit should be a logical unit
-
-Example commit messages:
-```
-feat: add support for custom error messages
-fix: resolve issue with nested schema references
-docs: update installation instructions
-test: add tests for MapRequest attribute
-```
-
-### Review Process
-
-- Maintainers will review your PR
-- Address any requested changes
-- Once approved, your PR will be merged
-
-## Questions?
-
-If you have questions:
-
-- Open an issue on GitHub
-- Email: 773021792e@gmail.com
-
-## License
-
-By contributing, you agree that your contributions will be licensed under the MIT License.
-
-Thank you for contributing! 🎉
+Thank you for contributing to making this project better! 🎉

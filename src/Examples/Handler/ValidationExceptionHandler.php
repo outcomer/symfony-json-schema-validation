@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace Outcomer\ValidationBundle\Examples\Handler;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Outcomer\ValidationBundle\Exception\ValidationException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 /**
@@ -25,18 +25,18 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
  */
 class ValidationExceptionHandler
 {
-	public function handleValidationBundleException(ValidationException $exception, ExceptionEvent $event): void
-	{
-		$errors = $exception->getValidationErrors();
+    public function handleValidationBundleException(ValidationException $exception, ExceptionEvent $event): void
+    {
+        $errors = $exception->getValidationErrors();
 
-		$response = new JsonResponse(
-			data: [
-				'message' => $exception->getMessage(),
-				'errors'  => $errors,
-			],
-			status: $exception->getStatusCode()
-		);
+        $response = new JsonResponse(
+            data: [
+                'message' => $exception->getMessage(),
+                'errors'  => $errors,
+            ],
+            status: $exception->getStatusCode()
+        );
 
-		$event->setResponse($response);
-	}
+        $event->setResponse($response);
+    }
 }

@@ -21,7 +21,6 @@
     ],
     "require": {
         "php": ">=8.4",
-        "opis/json-schema": "^2.6",
         "symfony/config": "^8.0",
         "symfony/dependency-injection": "^8.0",
         "symfony/framework-bundle": "^8.0",
@@ -30,6 +29,7 @@
     },
     "require-dev": {
         "escapestudios/symfony2-coding-standard": "^3.16",
+        "nelmio/api-doc-bundle": "^5.9",
         "phpunit/phpunit": "^12.5",
         "squizlabs/php_codesniffer": "^3.13",
         "symfony/phpunit-bridge": "^8.0",
@@ -59,8 +59,8 @@
             "phpcs --config-set colors 1",
             "phpcs --config-set installed_paths ../../escapestudios/symfony2-coding-standard"
         ],
-        "cs-check": "phpcs",
-        "cs-fix": "phpcbf",
+        "cs-check": "vendor/bin/phpcs --report=full",
+        "cs-fix": "vendor/bin/phpcbf",
         "post-install-cmd": [
             "@code-sniffer"
         ],

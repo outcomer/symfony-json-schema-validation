@@ -1,0 +1,19 @@
+/* Medium zoom styles */
+.medium-zoom-overlay {
+  z-index: 100;
+}
+
+.medium-zoom-image--opened {
+  z-index: 101;
+  cursor: zoom-out;
+}
+
+/* Make images clickable */
+.main img {
+  cursor: zoom-in;
+  transition: transform 0.3s ease;
+}
+
+.main img:hover {
+  transform: scale(1.02);
+}

@@ -15,16 +15,15 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - '8.2'
-          - '8.3'
           - '8.4'
         symfony-version:
-          - '7.4.*'
+          - '8.0.*'
+          - '8.1.*'
         dependency-version:
           - 'prefer-stable'
         include:
-          - php-version: '8.3'
-            symfony-version: '7.4.*'
+          - php-version: '8.4'
+            symfony-version: '8.0.*'
             dependency-version: 'prefer-lowest'
 
     steps:
@@ -60,7 +59,7 @@ jobs:
 
       - name: Run code sniffer
         run: composer cs-check
-        if: matrix.php-version == '8.3' && matrix.dependency-version == 'prefer-stable'
+        if: matrix.php-version == '8.4' && matrix.dependency-version == 'prefer-stable'
 
   coverage:
     name: Code Coverage
@@ -73,7 +72,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           extensions: json, mbstring
           coverage: pcov
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Outcomer Symfony Validation package.
  *
@@ -16,6 +17,6 @@ namespace Outcomer\ValidationBundle\Enum;
  */
 enum ValidationStatus
 {
-	case VALID;
-	case INVALID;
+    case VALID;
+    case INVALID;
 }

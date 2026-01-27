@@ -342,4 +342,4 @@ JSON Schema:
 
 - **[Schema Basics →](./schema-basics)** - Understand JSON Schema structure
 - **[OpenAPI Integration →](./openapi-integration)** - Auto-generate API docs
-- **[Examples →](../examples/)** - See real-world DTO examples
+- **[Examples →](./examples)** - See real-world DTO examples

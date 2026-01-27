@@ -381,6 +381,6 @@ Documentation built with **[VitePress](https://vitepress.dev/)**.
 
 ## Next Steps
 
-- **[How It Works →](../guide/how-it-works)** - Understand the core philosophy
-- **[Examples →](../examples/)** - Real-world code examples
+- **[How It Works →](./how-it-works)** - Understand the core philosophy
+- **[Examples →](./examples)** - Real-world code examples
 - **[GitHub →](https://github.com/outcomer/symfony-json-schema-validation)** - Source code and issues

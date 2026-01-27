@@ -265,4 +265,4 @@ Your JSON Schema validates this entire structure, allowing you to define validat
 
 - **[Configuration →](./configuration)** - Learn about bundle configuration options
 - **[DTO Injection →](./dto-injection)** - Use custom DTOs with validated data
-- **[Examples →](../examples/)** - See real-world schema examples
+- **[Examples →](./examples)** - See real-world schema examples

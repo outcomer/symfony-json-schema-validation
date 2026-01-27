@@ -88,5 +88,5 @@ public function createUser(#[MapRequest('user-create.json')] ValidatedRequest $r
 
 - **[How It Works →](/guide/how-it-works)** - Understand the Single Source of Truth philosophy
 - **[Installation →](/guide/installation)** - Step-by-step installation guide  
-- **[Examples →](/examples/)** - Real-world usage examples
-- **[API Reference →](/api/)** - Complete API documentation
+- **[Examples →](/guide/examples)** - Real-world usage examples
+- **[API Reference →](/guide/api)** - Complete API documentation

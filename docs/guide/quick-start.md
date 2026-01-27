@@ -299,7 +299,7 @@ You now have a working validation setup! Explore more advanced features:
 - **[Schema Basics →](./schema-basics)** - Learn JSON Schema in detail
 - **[DTO Injection →](./dto-injection)** - Advanced DTO patterns
 - **[OpenAPI Integration →](./openapi-integration)** - Automatic API documentation
-- **[Examples →](/examples/)** - More real-world examples
+- **[Examples →](./examples)** - More real-world examples
 
 ## Common Patterns
 

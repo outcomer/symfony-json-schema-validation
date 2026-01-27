@@ -464,6 +464,6 @@ public function upload(#[MapRequest('file-upload.json')] FileUploadDto $dto, Req
 
 ## Next Steps
 
-- **[How It Works →](../guide/how-it-works)** - Understand the philosophy
-- **[Schema Basics →](../guide/schema-basics)** - JSON Schema fundamentals
-- **[DTO Injection →](../guide/dto-injection)** - Type-safe DTOs
+- **[How It Works →](./how-it-works)** - Understand the philosophy
+- **[Schema Basics →](./schema-basics)** - JSON Schema fundamentals
+- **[DTO Injection →](./dto-injection)** - Type-safe DTOs

@@ -310,4 +310,4 @@ Benefits:
 
 - **[Schema Basics →](./schema-basics)** - Learn JSON Schema syntax
 - **[DTO Injection →](./dto-injection)** - Type-safe DTOs
-- **[Examples →](../examples/)** - Real-world examples
+- **[Examples →](./examples)** - Real-world examples

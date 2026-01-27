@@ -15,7 +15,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/how-it-works' },
       { text: 'Examples', link: '/guide/examples' },
-      { text: 'API', link: '/api/' },
+      { text: 'API', link: '/guide/api' },
       { text: 'GitHub', link: 'https://github.com/outcomer/symfony-json-schema-validation' }
     ],
 
@@ -46,7 +46,7 @@ export default defineConfig({
       {
         text: 'API Reference',
         items: [
-          { text: 'Complete API Docs', link: '/api/' }
+          { text: 'Complete API Docs', link: '/guide/api' }
         ]
       }
     ],

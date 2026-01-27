@@ -30,8 +30,8 @@ A powerful and flexible JSON Schema validation solution for Symfony applications
 - [🔗 Configuration Options](https://outcomer.github.io/symfony-json-schema-validation/guide/configuration)
 - [🔗 DTO Injection](https://outcomer.github.io/symfony-json-schema-validation/guide/dto-injection)
 - [🔗 OpenAPI Integration](https://outcomer.github.io/symfony-json-schema-validation/guide/openapi-integration)
-- [🔗 Examples](https://outcomer.github.io/symfony-json-schema-validation/examples/)
-- [🔗 API Reference](https://outcomer.github.io/symfony-json-schema-validation/api/)
+- [🔗 Examples](https://outcomer.github.io/symfony-json-schema-validation/guide/examples)
+- [🔗 API Reference](https://outcomer.github.io/symfony-json-schema-validation/guide/api)
 
 ## ⚡ Quick Start
 

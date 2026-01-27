@@ -5,9 +5,11 @@
     "docs:dev": "vitepress dev docs --host 0.0.0.0",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs --host 0.0.0.0",
-    "docs:deploy": "npm run docs:build && mkdir -p ../../../public/symfony-json-schema-validation && cp -r docs/.vitepress/dist/* ../../../public/symfony-json-schema-validation/"
+    "docs:deploy": "npm run docs:build && mkdir -p ../../../public/symfony-json-schema-validation && cp -r docs/.vitepress/dist/* ../../../public/symfony-json-schema-validation/",
+    "check:links": "markdown-link-check README.md"
   },
   "devDependencies": {
+    "markdown-link-check": "^3.14.2",
     "medium-zoom": "^1.1.0",
     "vitepress": "^1.0.0"
   }

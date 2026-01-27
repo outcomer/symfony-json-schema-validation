@@ -37,3 +37,6 @@ jobs:
           publish_branch: gh-pages
           destination_dir: docs
           force_orphan: true
+
+      - name: Check README links
+        run: npm run check:links

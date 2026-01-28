@@ -53,6 +53,8 @@ Closes #
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] I have updated the documentation (if necessary)
 - [ ] I have updated the CHANGELOG.md (if necessary)
+- [ ] I have updated the version badge in README.md (for releases: `?v=X` parameter)
+- [ ] I have updated the branch-alias in composer.json (for major/minor releases: `X.Y.x-dev`)
 - [ ] My changes generate no new warnings or errors
 - [ ] Any dependent changes have been merged and published
 

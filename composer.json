@@ -75,7 +75,7 @@
             "require": "8.0.*"
         },
         "branch-alias": {
-            "dev-main": "1.0-dev"
+            "dev-main": "2.0-dev"
         }
     },
     "config": {

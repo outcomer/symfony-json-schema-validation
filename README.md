@@ -3,7 +3,7 @@
 A powerful and flexible JSON Schema validation solution for Symfony applications with automatic OpenAPI documentation generation.
 
 [![GitHub Actions](https://github.com/outcomer/symfony-json-schema-validation/workflows/CI/badge.svg)](https://github.com/outcomer/symfony-json-schema-validation/actions)
-[![Latest Stable Version](https://poser.pugx.org/outcomer/symfony-json-schema-validation/v/stable.svg)](https://packagist.org/packages/outcomer/symfony-json-schema-validation)
+[![Latest Stable Version](https://poser.pugx.org/outcomer/symfony-json-schema-validation/v/stable.svg?v=2)](https://packagist.org/packages/outcomer/symfony-json-schema-validation)
 [![PHP Version](https://img.shields.io/badge/php->=8.4-blue.svg)](https://php.net/)
 [![Symfony Version](https://img.shields.io/badge/symfony-8.0+-green.svg)](https://symfony.com/)
 [![License](https://poser.pugx.org/outcomer/symfony-json-schema-validation/license.svg)](https://packagist.org/packages/outcomer/symfony-json-schema-validation)

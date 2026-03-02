@@ -5,7 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.0.0] - 2026-03-02
+
+### Changed
+- **Restored Symfony 7.4+ support** - Bundle now supports Symfony ^7.4 and ^8.0
+- Minimum PHP version lowered to 8.2 (required for Symfony 7.4)
+- Updated PHPUnit compatibility to support both ^11.0 and ^12.0 versions
+- Updated all Symfony dependencies to support both 7.4+ and 8.0+ versions
+
+### Compatibility
+- PHP: >=8.2
+- Symfony: ^7.4 | ^8.0
+- PHPUnit: ^11.0 | ^12.0
 
 ## [2.0.0] - 2026-01-27
 

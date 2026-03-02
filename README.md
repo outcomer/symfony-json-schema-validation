@@ -3,9 +3,9 @@
 A powerful and flexible JSON Schema validation solution for Symfony applications with automatic OpenAPI documentation generation.
 
 [![GitHub Actions](https://github.com/outcomer/symfony-json-schema-validation/workflows/CI/badge.svg)](https://github.com/outcomer/symfony-json-schema-validation/actions)
-[![Latest Stable Version](https://poser.pugx.org/outcomer/symfony-json-schema-validation/v/stable.svg?v=2)](https://packagist.org/packages/outcomer/symfony-json-schema-validation)
-[![PHP Version](https://img.shields.io/badge/php->=8.4-blue.svg)](https://php.net/)
-[![Symfony Version](https://img.shields.io/badge/symfony-8.0+-green.svg)](https://symfony.com/)
+[![Latest Stable Version](https://poser.pugx.org/outcomer/symfony-json-schema-validation/v/stable.svg?v=3)](https://packagist.org/packages/outcomer/symfony-json-schema-validation)
+[![PHP Version](https://img.shields.io/badge/php->=8.2-blue.svg)](https://php.net/)
+[![Symfony Version](https://img.shields.io/badge/symfony-7.4+%20%7C%208.0+-green.svg)](https://symfony.com/)
 [![License](https://poser.pugx.org/outcomer/symfony-json-schema-validation/license.svg)](https://packagist.org/packages/outcomer/symfony-json-schema-validation)
 
 ## 🚀 Features
@@ -15,7 +15,7 @@ A powerful and flexible JSON Schema validation solution for Symfony applications
 - **Priority-Based Validation**: Control validation order with MapRequest priority system
 - **Type-Safe Results**: Strongly typed validated data with ValidatedDtoInterface support
 - **Comprehensive Error Handling**: Detailed validation errors with JSON Schema feedback
-- **Modern Symfony Integration**: Full support for Symfony 8.0+ with attribute-based configuration
+- **Modern Symfony Integration**: Full support for Symfony 7.4+ and 8.0+ with attribute-based configuration
 
 ## 📖 Documentation
 
@@ -99,7 +99,7 @@ class UserController
 - **API Documentation**: Automatic OpenAPI spec generation with zero configuration
 - **Production Ready**: Battle-tested with comprehensive error handling and logging
 - **Flexible Schema**: Support for complex validation scenarios across all request components
-- **Modern PHP**: Takes advantage of PHP 8.4+ features and Symfony 8.0+ improvements
+- **Modern PHP**: Takes advantage of PHP 8.2+ features and Symfony 7.4+/8.0+ improvements
 
 ## 🤝 Contributing
 

@@ -7,7 +7,12 @@ export default defineConfig({
   description: 'Single Source of Truth for Symfony API contracts with JSON Schema validation and automatic OpenAPI documentation',
   base: `/${REPO_NAME}/`,
 
+  sitemap: {
+    hostname: `https://outcomer.github.io/${REPO_NAME}/`
+  },
+
   ignoreDeadLinks: false,
+  lastUpdated: true,
 
   themeConfig: {
     logo: '/logo.svg',
@@ -16,7 +21,7 @@ export default defineConfig({
       { text: 'Guide', link: '/guide/how-it-works' },
       { text: 'Examples', link: '/guide/examples' },
       { text: 'API', link: '/guide/api' },
-      { text: 'GitHub', link: 'https://github.com/outcomer/symfony-json-schema-validation' }
+      { text: 'GitHub', link: `https://github.com/outcomer/${REPO_NAME}` }
     ],
 
     sidebar: [
@@ -52,7 +57,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/outcomer/symfony-json-schema-validation' }
+      { icon: 'github', link: `https://github.com/outcomer/${REPO_NAME}` }
     ],
 
     footer: {

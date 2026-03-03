@@ -1,0 +1,18 @@
+# JSON Schema Validation
+
+Single Source of Truth for Symfony API contracts with JSON Schema validation and automatic OpenAPI documentation
+
+## Overview
+[Skip to content](https://outcomer.github.io/symfony-json-schema-validation#VPContent): A quick navigation link to bypass introductory content.
+[JSON Schema Validation](https://outcomer.github.io/symfony-json-schema-validation/): This page provides an overview of JSON Schema validation within the Symfony framework, emphasizing its role in maintaining API contracts.
+
+## Guides and Documentation
+[Guide](https://outcomer.github.io/symfony-json-schema-validation/guide/how-it-works.html): A comprehensive guide detailing how to implement JSON Schema validation in Symfony applications, including best practices and common pitfalls.
+[Examples](https://outcomer.github.io/symfony-json-schema-validation/guide/examples.html): A collection of practical examples demonstrating the use of JSON Schema validation in various scenarios, helping developers understand its application.
+[API](https://outcomer.github.io/symfony-json-schema-validation/guide/api.html): Documentation of the API endpoints related to JSON Schema validation, outlining the available methods and their functionalities.
+[Get Started](https://outcomer.github.io/symfony-json-schema-validation/guide/quick-start.html): A beginner's guide to setting up JSON Schema validation in Symfony, including prerequisites and initial configuration steps.
+[Installation →](https://outcomer.github.io/symfony-json-schema-validation/guide/installation.html): Instructions for installing the necessary packages and dependencies to enable JSON Schema validation in your Symfony project.
+
+## Additional Resources
+[GitHub](https://github.com/outcomer/symfony-json-schema-validation): The official GitHub repository for the JSON Schema validation project, where developers can access the source code, report issues, and contribute to the project.
+[Opis JSON Schema](https://github.com/opis/json-schema): A detailed description of the Opis JSON Schema library, which is utilized for JSON Schema validation in Symfony applications.

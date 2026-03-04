@@ -71,8 +71,11 @@ export default defineConfig({
   },
 
   head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/symfony-json-schema-validation/favicon.svg' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `/${REPO_NAME}/favicon.svg` }],
     ['meta', { name: 'google-site-verification', content: 'Jd6v0TBT246H7NMdiAivOkkemvW9_KGGJC3EKzZ7AtU' }],
-    ['meta', { name: 'msvalidate.01', content: 'CDE6B128D984CC16F15D6CAA4C06DA97' }]
+    ['meta', { name: 'msvalidate.01', content: 'CDE6B128D984CC16F15D6CAA4C06DA97' }],
+    ['meta', { property: 'og:title', content: 'JSON Schema Validation for Symfony' }],
+    ['meta', { property: 'og:description', content: 'API validation made simple' }],
+    ['meta', { property: 'og:url', content: `https://outcomer.github.io/${REPO_NAME}` }]
   ]
 })

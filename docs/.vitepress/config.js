@@ -74,8 +74,20 @@ export default defineConfig({
     ['link', { rel: 'icon', type: 'image/svg+xml', href: `/${REPO_NAME}/favicon.svg` }],
     ['meta', { name: 'google-site-verification', content: 'Jd6v0TBT246H7NMdiAivOkkemvW9_KGGJC3EKzZ7AtU' }],
     ['meta', { name: 'msvalidate.01', content: 'CDE6B128D984CC16F15D6CAA4C06DA97' }],
-    ['meta', { property: 'og:title', content: 'JSON Schema Validation for Symfony' }],
-    ['meta', { property: 'og:description', content: 'API validation made simple' }],
-    ['meta', { property: 'og:url', content: `https://outcomer.github.io/${REPO_NAME}` }]
+
+    // Facebook Open Graph
+    ['meta', { property: 'og:url', content: `https://outcomer.github.io/${REPO_NAME}/` }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:title', content: 'JSON Schema Validation for Symfony API Contracts' }],
+    ['meta', { property: 'og:description', content: 'Single Source of Truth for Symfony API contracts with JSON Schema validation and automatic OpenAPI documentation' }],
+    ['meta', { property: 'og:image', content: `https://outcomer.github.io/${REPO_NAME}/og-image.png` }],
+
+    // Twitter
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { property: 'twitter:domain', content: 'outcomer.github.io' }],
+    ['meta', { property: 'twitter:url', content: `https://outcomer.github.io/${REPO_NAME}/` }],
+    ['meta', { name: 'twitter:title', content: 'JSON Schema Validation for Symfony API Contracts' }],
+    ['meta', { name: 'twitter:description', content: 'Single Source of Truth for Symfony API contracts with JSON Schema validation and automatic OpenAPI documentation' }],
+    ['meta', { name: 'twitter:image', content: `https://outcomer.github.io/${REPO_NAME}/og-image.png` }]
   ]
 })

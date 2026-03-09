@@ -9,7 +9,7 @@ A powerful and flexible JSON Schema validation solution for Symfony applications
 [![License](https://img.shields.io/packagist/l/outcomer/symfony-json-schema-validation)](https://packagist.org/packages/outcomer/symfony-json-schema-validation)
 
 ## 📚 Why
-Read the story behind this bundle on [Hashnode](https://outcomer.hashnode.dev/symfony-bundle-that-validates-anything-and-everything):
+Read the story behind this bundle on [Hashnode](https://outcomer.hashnode.dev/symfony-bundle-that-validates-anything-and-everything)
 
 ## 🚀 Features
 

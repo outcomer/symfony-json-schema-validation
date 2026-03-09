@@ -1,4 +1,4 @@
-# Symfony JSON Schema Validation Bundle
+# Stop writing DTO + Assert hell in Symfony - validate requests with JSON Schema instead.
 
 A powerful and flexible JSON Schema validation solution for Symfony applications with automatic OpenAPI documentation generation.
 

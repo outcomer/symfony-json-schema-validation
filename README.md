@@ -8,6 +8,9 @@ A powerful and flexible JSON Schema validation solution for Symfony applications
 [![Symfony Version](https://img.shields.io/badge/symfony-7.4+%20%7C%208.0+-green.svg)](https://symfony.com/)
 [![License](https://img.shields.io/packagist/l/outcomer/symfony-json-schema-validation)](https://packagist.org/packages/outcomer/symfony-json-schema-validation)
 
+## 📚 Why
+Read the story behind this bundle on [Hashnode](https://outcomer.hashnode.dev/symfony-bundle-that-validates-anything-and-everything):
+
 ## 🚀 Features
 
 - **Complete Request Validation**: Validate request body, query parameters, path variables, and headers
@@ -19,7 +22,7 @@ A powerful and flexible JSON Schema validation solution for Symfony applications
 
 ## 📖 Documentation
 
-📚 **[Complete Documentation](https://outcomer.github.io/symfony-json-schema-validation/)** - Visit our comprehensive documentation website
+**[Complete Documentation](https://outcomer.github.io/symfony-json-schema-validation/)** - Visit our comprehensive documentation website
 
 ### Quick Links
 

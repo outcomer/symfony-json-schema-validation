@@ -88,6 +88,13 @@ export default defineConfig({
     ['meta', { property: 'twitter:url', content: `https://outcomer.github.io/${REPO_NAME}/` }],
     ['meta', { name: 'twitter:title', content: 'JSON Schema Validation for Symfony API Contracts' }],
     ['meta', { name: 'twitter:description', content: 'Single Source of Truth for Symfony API contracts with JSON Schema validation and automatic OpenAPI documentation' }],
-    ['meta', { name: 'twitter:image', content: `https://outcomer.github.io/${REPO_NAME}/og-image.png` }]
+    ['meta', { name: 'twitter:image', content: `https://outcomer.github.io/${REPO_NAME}/og-image.png` }],
+
+    // Microsoft Clarity tracking
+    ['script', {}, `(function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "vv6kxraikb");`]
   ]
 })

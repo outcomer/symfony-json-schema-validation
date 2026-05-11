@@ -15,7 +15,7 @@ export default defineConfig({
   lastUpdated: true,
 
   themeConfig: {
-    logo: '/logo.svg',
+    logo: { src: '/logo.svg', alt: 'Symfony JSON Schema Validation' },
 
     nav: [
       { text: 'Guide', link: '/guide/how-it-works' },

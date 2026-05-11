@@ -71,6 +71,7 @@ export default defineConfig({
   },
 
   head: [
+    ['link', { rel: 'alternate icon', type: 'image/png', href: `/${REPO_NAME}/favicon.png` }],
     ['link', { rel: 'icon', type: 'image/svg+xml', href: `/${REPO_NAME}/favicon.svg` }],
     ['meta', { name: 'google-site-verification', content: 'Jd6v0TBT246H7NMdiAivOkkemvW9_KGGJC3EKzZ7AtU' }],
     ['meta', { name: 'msvalidate.01', content: 'CDE6B128D984CC16F15D6CAA4C06DA97' }],

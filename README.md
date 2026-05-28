@@ -1,6 +1,4 @@
-# Stop writing DTO + Assert hell in Symfony - validate requests with JSON Schema instead.
-
-A powerful and flexible JSON Schema validation solution for Symfony applications with automatic OpenAPI documentation generation.
+# Stop writing DTOs, validation and OpenAPI three times in Symfony
 
 [![GitHub Actions](https://github.com/outcomer/symfony-json-schema-validation/workflows/CI/badge.svg)](https://github.com/outcomer/symfony-json-schema-validation/actions)
 [![Latest Stable Version](https://img.shields.io/packagist/v/outcomer/symfony-json-schema-validation?label=stable)](https://packagist.org/packages/outcomer/symfony-json-schema-validation)
@@ -8,33 +6,57 @@ A powerful and flexible JSON Schema validation solution for Symfony applications
 [![Symfony Version](https://img.shields.io/badge/symfony-7.4+%20%7C%208.0+-green.svg)](https://symfony.com/)
 [![License](https://img.shields.io/packagist/l/outcomer/symfony-json-schema-validation)](https://packagist.org/packages/outcomer/symfony-json-schema-validation)
 
-## 📚 Why
-Read the story behind this bundle on [Hashnode](https://outcomer.hashnode.dev/symfony-bundle-that-validates-anything-and-everything)
+## Before
 
-## 🚀 Features
+Typical Symfony API endpoint:
 
-- **Complete Request Validation**: Validate request body, query parameters, path variables, and headers
-- **Automatic OpenAPI Documentation**: Generate API documentation with nelmio/api-doc-bundle integration
-- **Priority-Based Validation**: Control validation order with MapRequest priority system
-- **Type-Safe Results**: Strongly typed validated data with ValidatedDtoInterface support
-- **Comprehensive Error Handling**: Detailed validation errors with JSON Schema feedback
-- **Modern Symfony Integration**: Full support for Symfony 7.4+ and 8.0+ with attribute-based configuration
+- Request DTO
+- Symfony Validator constraints
+- OpenAPI annotations
+- Mapping logic
 
-## 📖 Documentation
+Same field described multiple times.
 
-**[Complete Documentation](https://outcomer.github.io/symfony-json-schema-validation/)** - Visit our comprehensive documentation website
+```php
+class CreateUserRequest
+{
+    #[Assert\NotBlank]
+    #[Assert\Email]
+    public string $email;
+}
+```
 
-### Quick Links
+Plus OpenAPI annotations and mapping.
 
-- [🔗 How It Works](https://outcomer.github.io/symfony-json-schema-validation/guide/how-it-works)
-- [🔗 Installation Guide](https://outcomer.github.io/symfony-json-schema-validation/guide/installation)
-- [🔗 Quick Start Tutorial](https://outcomer.github.io/symfony-json-schema-validation/guide/quick-start)
-- [🔗 Schema Basics](https://outcomer.github.io/symfony-json-schema-validation/guide/schema-basics)
-- [🔗 Configuration Options](https://outcomer.github.io/symfony-json-schema-validation/guide/configuration)
-- [🔗 DTO Injection](https://outcomer.github.io/symfony-json-schema-validation/guide/dto-injection)
-- [🔗 OpenAPI Integration](https://outcomer.github.io/symfony-json-schema-validation/guide/openapi-integration)
-- [🔗 Examples](https://outcomer.github.io/symfony-json-schema-validation/guide/examples)
-- [🔗 API Reference](https://outcomer.github.io/symfony-json-schema-validation/guide/api)
+This logic is repeated in 3 different places in real projects.
+
+---
+
+## After
+
+One schema:
+
+```json
+{
+  "type": "object",
+  "required": ["email"],
+  "properties": {
+    "email": {
+      "type": "string",
+      "format": "email"
+    }
+  }
+}
+```
+
+Used for:
+- validation
+- request mapping
+- OpenAPI generation
+
+One schema replaces all of this duplication.
+
+---
 
 ## ⚡ Quick Start
 
@@ -53,10 +75,7 @@ class UserController
 {
     #[Route('/api/users', methods: ['POST'])]
     public function create(
-        #[MapRequest(
-            schemaPath: 'schemas/user-create.json',
-            validationGroups: ['create']
-        )]
+        #[MapRequest('schemas/user-create.json')]
         UserCreateDto $user
     ): JsonResponse {
         // $user contains validated data from request body, query, path, and headers
@@ -96,13 +115,72 @@ class UserController
 }
 ```
 
-## 🎯 Key Benefits
+---
 
-- **Developer Experience**: Intuitive attribute-based validation with full IDE support
-- **API Documentation**: Automatic OpenAPI spec generation with zero configuration
-- **Production Ready**: Battle-tested with comprehensive error handling and logging
-- **Flexible Schema**: Support for complex validation scenarios across all request components
-- **Modern PHP**: Takes advantage of PHP 8.2+ features and Symfony 7.4+/8.0+ improvements
+## 📚 Why
+Read the story behind this bundle on [Hashnode](https://outcomer.hashnode.dev/symfony-bundle-that-validates-anything-and-everything)
+
+## 📖 Documentation
+
+**[Complete Documentation](https://outcomer.github.io/symfony-json-schema-validation/)** - Visit our comprehensive documentation website
+
+### Quick Links
+
+- [🔗 How It Works](https://outcomer.github.io/symfony-json-schema-validation/guide/how-it-works)
+- [🔗 Installation Guide](https://outcomer.github.io/symfony-json-schema-validation/guide/installation)
+- [🔗 Quick Start Tutorial](https://outcomer.github.io/symfony-json-schema-validation/guide/quick-start)
+- [🔗 Schema Basics](https://outcomer.github.io/symfony-json-schema-validation/guide/schema-basics)
+- [🔗 Configuration Options](https://outcomer.github.io/symfony-json-schema-validation/guide/configuration)
+- [🔗 DTO Injection](https://outcomer.github.io/symfony-json-schema-validation/guide/dto-injection)
+- [🔗 OpenAPI Integration](https://outcomer.github.io/symfony-json-schema-validation/guide/openapi-integration)
+- [🔗 Examples](https://outcomer.github.io/symfony-json-schema-validation/guide/examples)
+- [🔗 API Reference](https://outcomer.github.io/symfony-json-schema-validation/guide/api)
+
+## 🚀 Features
+
+- Single source of truth for API validation
+- No serializer groups
+- Automatic OpenAPI generation
+
+## When NOT to use this
+
+Use API Platform if you need:
+- full CRUD automation
+- admin panels
+- heavy framework magic
+
+## Incremental adoption
+
+You can use this bundle:
+
+- on a single endpoint
+- together with Symfony Validator
+- together with API Platform
+- without rewriting your application
+
+No migration is required.
+
+## FAQ
+
+### Does this replace Symfony Validator?
+
+No. You can use both together.
+
+### Does this work with API Platform?
+
+Yes. The bundle can coexist with API Platform.
+
+### Is this all-or-nothing?
+
+No. You can adopt it endpoint-by-endpoint.
+
+### Why use JSON Schema?
+
+To avoid duplication between validation, request mapping and OpenAPI.
+
+### Is there vendor lock-in?
+
+No. Your schemas remain standard JSON Schema documents.
 
 ## 🤝 Contributing
 

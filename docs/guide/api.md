@@ -10,17 +10,17 @@ The main attribute for enabling JSON Schema validation on controller method para
 
 ```php
 #[MapRequest(
-    schemaPath: string,
-    validationGroups: array = [],
-    priority: int = 0
+    schema: string,
+    resolver: string = MapRequestResolver::class,
+    triggerResponse: bool = true
 )]
 ```
 
 **Parameters:**
 
-- `schemaPath` (string, required): Path to JSON Schema file relative to `schemas_path` configuration
-- `validationGroups` (array, optional): Validation groups for conditional validation
-- `priority` (int, optional): Execution priority when multiple `MapRequest` attributes are used
+- `schema` (string, required): Path to JSON Schema file relative to `schemas_path` configuration
+- `resolver` (string, optional): Custom resolver class for advanced usage
+- `triggerResponse` (bool, optional): Trigger immediate 400 response on validation failure (`true`) or collect violations (`false`)
 
 **Example:**
 
@@ -28,7 +28,7 @@ The main attribute for enabling JSON Schema validation on controller method para
 use Outcomer\ValidationBundle\Attribute\MapRequest;
 
 #[Route('/api/users', methods: ['POST'])]
-public function createUser(#[MapRequest('user-create.json', validationGroups: ['create'])] UserCreateDto $user): JsonResponse
+public function createUser(#[MapRequest('user-create.json')] UserCreateDto $user): JsonResponse
 {
     // ...
 }
@@ -323,18 +323,19 @@ class ExceptionListener
 Main service for validating data against JSON Schema.
 
 ```php
-namespace Outcomer\ValidationBundle\Service;
+namespace Outcomer\ValidationBundle\Schema;
 
 class SchemaValidator
 {
-    public function validate(string $schemaPath, array $data): void;
+    public function validate(array $data, array $schema): void;
+    public function validateBySchemaFile(mixed $data, string $schemaPath): void;
 }
 ```
 
 **Usage (advanced):**
 
 ```php
-use Outcomer\ValidationBundle\Service\SchemaValidator;
+use Outcomer\ValidationBundle\Schema\SchemaValidator;
 
 class CustomService
 {
@@ -342,9 +343,9 @@ class CustomService
         private SchemaValidator $validator
     ) {}
     
-    public function validateCustomData(array $data): void
+    public function validateCustomData(array $data, string $schemaPath): void
     {
-        $this->validator->validate('custom-schema.json', $data);
+        $this->validator->validateBySchemaFile($data, $schemaPath);
     }
 }
 ```

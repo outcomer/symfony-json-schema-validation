@@ -14,7 +14,9 @@ composer require outcomer/symfony-json-schema-validation
 
 ## Bundle Registration
 
-If using Symfony Flex (recommended), the bundle will be automatically registered. Otherwise, add it manually:
+If using Symfony Flex (recommended) and you accept the recipe, the bundle is registered and a starter config file is created for you automatically.
+
+The recipe lives in the community-maintained [`symfony/recipes-contrib`](https://github.com/symfony/recipes-contrib) repository, so Flex will ask before applying it (unless `extra.symfony.allow-contrib` is `true` in your `composer.json`, or you're installing non-interactively - e.g. in CI - in which case it's skipped without asking). If you decline it, don't use Flex, or aren't running interactively, register the bundle yourself:
 
 ```php
 // config/bundles.php
@@ -24,7 +26,13 @@ return [
 ];
 ```
 
+Then create the configuration file yourself - see [Configuration](#configuration) below.
+
 ## Configuration
+
+::: warning This step is required
+`schemas` defaults to an empty list. Without at least one entry, no schema directory is registered, and every `#[MapRequest]` call will fail with "Schema directory is not registered" - this file isn't optional customization, it's required for the bundle to work at all.
+:::
 
 Create a configuration file to customize the bundle settings:
 

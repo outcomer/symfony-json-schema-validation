@@ -75,7 +75,7 @@ class UserController
 {
     #[Route('/api/users', methods: ['POST'])]
     public function create(
-        #[MapRequest('schemas/user-create.json')]
+        #[MapRequest('user-create.json')]
         UserCreateDto $user
     ): JsonResponse {
         // $user contains validated data from request body, query, path, and headers

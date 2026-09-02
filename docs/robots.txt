@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://outcomer.github.io/symfony-json-schema-validation/sitemap.xml

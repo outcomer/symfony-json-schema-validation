@@ -151,23 +151,33 @@ public function create(#[MapRequest('user-create.json')] UserCreateDto $user): J
 }
 ```
 
-Here's what happens:
+Here's what happens, as implemented by `MapRequestResolver::resolve()`:
 
-1. **Request arrives** at your controller
-2. **Before** your method executes, bundle intercepts it
-3. **Normalizes** request into unified structure:
-   ```php
-   [
-       'body' => /* parsed JSON */,
-       'query' => /* query params */,
-       'path' => /* route params */,
-       'headers' => /* headers */
-   ]
-   ```
-4. **Validates** against `user-create.json` schema
-5. **If valid:** Creates `UserCreateDto` with validated data
-6. **If invalid:** Returns 400 JSON error response (your method never runs)
-7. **Your method** receives guaranteed-valid typed DTO
+```mermaid
+sequenceDiagram
+    participant Kernel as Symfony Kernel
+    participant Resolver as MapRequestResolver
+    participant Validator as SchemaValidator
+    participant DTO as UserCreateDto
+
+    Kernel->>Resolver: resolve(Request, #[MapRequest])
+    Resolver->>Resolver: normalize body/query/path/headers
+    Resolver->>Validator: validateFileSchema(data, user-create.json)
+    alt schema matches
+        Validator-->>Resolver: (no exception)
+        Resolver->>DTO: fromPayload(payload, violations: [])
+        DTO-->>Kernel: typed, valid $user
+    else schema fails, triggerResponse: true (default)
+        Validator-->>Resolver: throws ValidationException
+        Resolver-->>Kernel: throws HttpValidationException
+        Note over Kernel: your controller method never runs
+    else schema fails, triggerResponse: false
+        Validator-->>Resolver: throws ValidationException
+        Resolver->>DTO: fromPayload(payload, violations: [...])
+        DTO-->>Kernel: $user with getViolations() populated
+        Note over Kernel: your controller method runs - it decides what to do
+    end
+```
 
 ## Guaranteed Documentation Accuracy
 

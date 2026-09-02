@@ -20,5 +20,7 @@ services:
     Outcomer\ValidationBundle\ArgumentResolver\MapRequestResolver:
         arguments:
             $schemasPath: '%outcomer_validation.schemas_path%'
+            $autoCastQuery: '%outcomer_validation.auto_cast_query%'
+            $autoCastPath: '%outcomer_validation.auto_cast_path%'
         tags:
             - { name: controller.argument_value_resolver, priority: 50 }

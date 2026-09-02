@@ -14,6 +14,7 @@ namespace Outcomer\ValidationBundle\ArgumentResolver;
 
 use InvalidArgumentException;
 use Outcomer\ValidationBundle\Attribute\MapRequest;
+use Outcomer\ValidationBundle\Exception\HttpValidationException;
 use Outcomer\ValidationBundle\Exception\ValidationException;
 use Outcomer\ValidationBundle\Helpers\Schema;
 use Outcomer\ValidationBundle\Helpers\Types;
@@ -32,8 +33,13 @@ final class MapRequestResolver implements ValueResolverInterface
 {
     private Schema $schema;
 
-    public function __construct(private readonly SchemaValidator $validator, private readonly string $schemasPath)
-    {
+    // phpcs:ignore Symfony.Functions.Arguments.Invalid
+    public function __construct(
+        private readonly SchemaValidator $validator,
+        private readonly string $schemasPath,
+        private readonly bool $autoCastQuery = true,
+        private readonly bool $autoCastPath = true
+    ) {
         $this->schema = new Schema($schemasPath);
     }
 
@@ -48,36 +54,30 @@ final class MapRequestResolver implements ValueResolverInterface
             return [];
         }
 
-        // Clean path parameters from internal Symfony attributes
         $pathParams = $request->attributes->all();
         $cleanPath  = [];
         foreach ($pathParams as $key => $value) {
             // Exclude Symfony system parameters
             if (!str_starts_with(haystack: $key, needle: '_') && !is_object($value)) {
-                // Try to convert numeric strings to numbers
-                if (is_string($value) && is_numeric($value)) {
-                    $cleanPath[$key] = str_contains(haystack: $value, needle: '.') ? (float) $value : (int) $value;
-                } else {
-                    $cleanPath[$key] = $value;
-                }
+                $cleanPath[$key] = $value;
             }
         }
 
         $requestContent = $request->getContent();
         $bodyData       = empty($requestContent) ? null : json_decode(json: $requestContent, associative: false);
 
-        // Extract and normalize headers
         $headers = [];
         foreach ($request->headers->all() as $key => $values) {
             // Use first value for single headers, array for multiple values
             $headers[strtolower($key)] = count($values) === 1 ? $values[0] : $values;
         }
 
-        $data = (object) [
+        $queryData = $request->query->all();
+        $data      = (object) [
             'body'    => $bodyData,
-            'query'   => (object) Types::castTypes($request->query->all()),
-            'path'    => (object) Types::castTypes($cleanPath),
-            'headers' => (object) Types::castTypes($headers),
+            'query'   => (object) ($this->autoCastQuery ? Types::castTypes($queryData) : $queryData),
+            'path'    => (object) ($this->autoCastPath ? Types::castTypes($cleanPath) : $cleanPath),
+            'headers' => (object) $headers,
         ];
 
         $schemaPath = $this->schema->findSchemaFile($attribute->schema);
@@ -85,17 +85,16 @@ final class MapRequestResolver implements ValueResolverInterface
         $violations = [];
 
         try {
-            $this->validator->validateBySchemaFile(data: $data, schemaPath: $schemaPath);
+            $this->validator->validateFileSchema(data: $data, schemaPath: $schemaPath);
         } catch (ValidationException $e) {
             if ($attribute->triggerResponse) {
-                throw $e;
+                throw new HttpValidationException($e);
             }
             $violations = $e->getValidationErrors();
         }
 
         $parameterType = $argument->getType();
 
-        // For MapRequest attribute, parameter type must be an existing class implementing ValidatedDtoInterface
         if ($parameterType && !class_exists($parameterType)) {
             throw new InvalidArgumentException(sprintf('MapRequest parameter type "%s" must be an existing class', $parameterType));
         }
@@ -104,12 +103,10 @@ final class MapRequestResolver implements ValueResolverInterface
             throw new InvalidArgumentException(sprintf('MapRequest parameter type "%s" must implement %s', $parameterType, ValidatedDtoInterface::class));
         }
 
-        // Create DTO via interface contract
         if ($parameterType) {
             return [$parameterType::fromPayload($payload, $violations)];
         }
 
-        // Default fallback when no type specified
         return [ValidatedRequest::fromPayload($payload, $violations)];
     }
 }

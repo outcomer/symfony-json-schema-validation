@@ -11,7 +11,7 @@ The bundle includes working example controllers that you can test in your own pr
    OUTCOMER_VALIDATION_ENABLE_EXAMPLES=true
    ```
 
-2. Import example routes in `config/routes.php`:
+2. Import the example routes, **unless your `config/routes.yaml` already imports `routing.controllers`** (the default Symfony skeleton does - it auto-discovers every attribute-routed controller registered as a service, including the bundle's, so no explicit import is needed in that case):
    ```php
    <?php
    
@@ -35,11 +35,39 @@ The bundle includes working example controllers that you can test in your own pr
    - `/_examples/validation/user` - User validation example
    - `/_examples/validation/user-dto` - DTO injection example
    - `/_examples/validation/profile` - Profile creation example
+   - `/_examples/validation/api-user` - OpenAPI documented endpoint
+   - `/_examples/validation/order` - Multi-level nested schemas: relative and absolute $ref
+   - `/_examples/validation/info` - Lists all example endpoints
 
 4. Explore the source code in the bundle:
    - Controllers: `vendor/outcomer/symfony-json-schema-validation/src/Examples/Controller/`
    - Schemas: `vendor/outcomer/symfony-json-schema-validation/src/Examples/Schemas/`
-   - DTOs: `vendor/outcomer/symfony-json-schema-validation/src/Examples/Model/`
+   - DTOs: `vendor/outcomer/symfony-json-schema-validation/src/Examples/Dto/`
+
+### How the Example Schemas Reference Each Other
+
+The bundled schemas aren't flat files - they `$ref` each other, the same way you'd split your own schemas into reusable pieces. This is the actual dependency graph among the files in `Examples/Schemas/`:
+
+```mermaid
+graph LR
+    order[order-create.json] -->|relative| customer[customer.json]
+    order -->|relative, array items| item[order-item.json]
+    customer -->|relative| name[name.json]
+    customer -->|relative| email[email.json]
+    customer -->|"absolute<br/>(separate registered domain)"| address[common/address.json]
+    address -->|relative| country[common/country.json]
+    user[user-create.json] -->|relative| name
+    user -->|relative| email
+    user -->|relative| age[age.json]
+
+    classDef absolute stroke:#f66,stroke-width:2px
+    class address absolute
+```
+
+- **Relative `$ref`** (e.g. `customer.json`'s `"$ref": "name.json"`) resolve against the referencing file's own directory - see [How It Works](./how-it-works#json-schema-openapi-3-not-conversion) and [Schema Basics](./schema-basics#schema-composition).
+- **Absolute `$ref`** (the red node, `common/address.json`) is registered under its own domain via `SchemaValidator::registerSchemaDir()` - see [Configuration](./configuration#schemas) - which is how the bundle keeps its own examples from colliding with your app's `schemas_path`.
+
+If you're new to JSON Schema itself (not this bundle), the official [Understanding JSON Schema](https://json-schema.org/understanding-json-schema/) guide and the [Opis JSON Schema references documentation](https://opis.io/json-schema/2.x/references.html) cover `$ref`, `$id` and base-URI resolution in depth - this bundle doesn't reinvent any of it, it's the same Opis resolver mechanics documented there.
 
 These examples demonstrate real implementations you can use as reference when building your own API.
 
@@ -130,12 +158,12 @@ readonly class UserRegisterDto implements ValidatedDtoInterface
     
     public static function fromPayload(Payload $payload, array $violations = []): static
     {
-        $data = $payload->getContent();
+        $data = $payload->getBody();
         
         return new static(
-            $data['email'],
-            $data['password'],
-            $data['name'],
+            $data->email,
+            $data->password,
+            $data->name,
             $violations
         );
     }
@@ -367,27 +395,27 @@ readonly class CreateOrderDto implements ValidatedDtoInterface
     
     public static function fromPayload(Payload $payload, array $violations = []): static
     {
-        $data = $payload->getContent();
+        $data = $payload->getBody();
         
         $customer = new CustomerDto(
-            $data['customer']['name'],
-            $data['customer']['email']
+            $data->customer->name,
+            $data->customer->email
         );
         
         $items = array_map(
             fn($item) => new OrderItemDto(
-                $item['productId'],
-                $item['quantity'],
-                $item['price']
+                $item->productId,
+                $item->quantity,
+                $item->price
             ),
-            $data['items']
+            $data->items
         );
         
         $shipping = new ShippingDto(
-            $data['shipping']['address'],
-            $data['shipping']['city'],
-            $data['shipping']['zipCode'],
-            $data['shipping']['country']
+            $data->shipping->address,
+            $data->shipping->city,
+            $data->shipping->zipCode,
+            $data->shipping->country
         );
         
         return new static($customer, $items, $shipping, $violations);

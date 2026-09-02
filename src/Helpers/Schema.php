@@ -50,35 +50,4 @@ final class Schema
 
         throw new InvalidArgumentException("Schema file not found: $fileName");
     }
-
-    /**
-     * Generate schema ID from file path
-     */
-    public function generateSchemaId(string $schemaPath, string $schemaDomain): string
-    {
-        $realPath        = realpath($schemaPath);
-        $realSchemasPath = realpath($this->schemasPath);
-
-        if ($realSchemasPath && str_starts_with($realPath, $realSchemasPath)) {
-            $relativePath = substr($realPath, strlen($realSchemasPath) + 1);
-        } else {
-            $relativePath = basename(dirname($schemaPath)).'/'.basename($schemaPath);
-        }
-
-        return rtrim($schemaDomain, '/')."/{$relativePath}";
-    }
-
-    /**
-     * Check if reference points to a schema file
-     */
-    public function getSchemaFileName(string $refUri): false|string
-    {
-        $path = parse_url($refUri, PHP_URL_PATH) ?: $refUri;
-
-        if ($path && str_contains($path, '.json')) {
-            return $path;
-        }
-
-        return false;
-    }
 }

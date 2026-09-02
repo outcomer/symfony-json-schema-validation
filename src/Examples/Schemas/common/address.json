@@ -1,0 +1,32 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "description": "A postal address, reusable across schemas that ship their own request body",
+    "properties": {
+        "street": {
+            "type": "string",
+            "minLength": 1,
+            "example": "1 Infinite Loop"
+        },
+        "city": {
+            "type": "string",
+            "minLength": 1,
+            "example": "Cupertino"
+        },
+        "zipCode": {
+            "type": "string",
+            "minLength": 1,
+            "example": "95014"
+        },
+        "country": {
+            "$ref": "country.json"
+        }
+    },
+    "required": [
+        "street",
+        "city",
+        "zipCode",
+        "country"
+    ],
+    "additionalProperties": false
+}

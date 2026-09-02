@@ -27,7 +27,6 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 final class MapRequestArgumentDescriber implements RouteArgumentDescriberInterface
 {
     private Schema $schema;
-    private string $currentSchemaDir;
 
     public function __construct(private readonly string $schemasPath)
     {
@@ -58,11 +57,11 @@ final class MapRequestArgumentDescriber implements RouteArgumentDescriberInterfa
             return;
         }
 
-        // Store original schema directory for relative $ref resolution
-        $this->currentSchemaDir = dirname($schemaPath);
-
-        // Resolve all $ref recursively (including root level and nested)
-        $resolvedSchema = $this->resolveAllRefs($jsonSchema);
+        // Resolve all $ref recursively (including root level and nested), relative
+        // to the directory the root schema actually lives in - this works whether
+        // the schema is inside schemasPath (the normal case) or elsewhere on disk
+        // (e.g. a bundle's own examples, referenced via a relative "../../.." path).
+        $resolvedSchema = $this->resolveAllRefs($jsonSchema, dirname($schemaPath));
 
         // Sort properties alphabetically for better API documentation
         if (isset($resolvedSchema['properties']['body']['properties'])) {
@@ -303,9 +302,11 @@ final class MapRequestArgumentDescriber implements RouteArgumentDescriberInterfa
     }
 
     /**
-     * Recursively resolves all $ref in the schema
+     * Recursively resolves all $ref in the schema. $refDir is the directory a
+     * relative $ref (e.g. "name.json") is resolved against - always the directory
+     * of the schema file the $ref actually appears in, not schemasPath.
      */
-    private function resolveAllRefs(array $schema): array
+    private function resolveAllRefs(array $schema, string $refDir): array
     {
         $result = [];
         $inject = null;
@@ -314,14 +315,15 @@ final class MapRequestArgumentDescriber implements RouteArgumentDescriberInterfa
             if ('$ref' === $key && str_ends_with($value, '.json')) {
                 // Replace $ref with resolved schema content
                 $refFileName = basename(parse_url($value, PHP_URL_PATH));
-                $refPath     = $this->schemasPath."/{$refFileName}";
+                $refPath     = $refDir."/{$refFileName}";
                 $refContent  = file_get_contents($refPath);
 
                 $resolvedSchema = json_decode($refContent, true);
 
                 if ($resolvedSchema) {
-                    // Recursively resolve any refs in the resolved schema
-                    $resolvedSchema = $this->resolveAllRefs($resolvedSchema);
+                    // Recursively resolve any refs in the resolved schema, relative
+                    // to the directory the referenced file itself lives in
+                    $resolvedSchema = $this->resolveAllRefs($resolvedSchema, dirname($refPath));
 
                     // Store $inject for later application
                     if (isset($schema['$inject'])) {
@@ -340,7 +342,7 @@ final class MapRequestArgumentDescriber implements RouteArgumentDescriberInterfa
                 continue;
             } elseif (is_array($value)) {
                 // Recursively resolve refs in nested arrays
-                $result[$key] = $this->resolveAllRefs($value);
+                $result[$key] = $this->resolveAllRefs($value, $refDir);
             } else {
                 $result[$key] = $value;
             }
@@ -349,7 +351,7 @@ final class MapRequestArgumentDescriber implements RouteArgumentDescriberInterfa
         // Apply $inject if it was found
         if (null !== $inject) {
             foreach ($inject as $slotKey => $slotValue) {
-                $result = $this->applyInject($result, $slotKey, $slotValue);
+                $result = $this->applyInject($result, $slotKey, $slotValue, $refDir);
             }
         }
 
@@ -382,17 +384,17 @@ final class MapRequestArgumentDescriber implements RouteArgumentDescriberInterfa
     /**
      * Applies $inject values to schema slots
      */
-    private function applyInject(array $schema, string $key, array $value): array
+    private function applyInject(array $schema, string $key, array $value, string $refDir): array
     {
         // Find schema slots and replace specific slot
-        return $this->replaceInArray(array: $schema, replacer: function ($item) use ($key, $value) {
+        return $this->replaceInArray(array: $schema, replacer: function ($item) use ($key, $value, $refDir) {
             if (is_array($item) && isset($item['$slots']) && isset($item['$slots'][$key])) {
                 // Replace entire object with content from $inject
                 $result = $item;
                 unset($result['$slots']);
                 // Merge with passed value, and resolve any refs in the injected value
                 foreach ($value as $k => $v) {
-                    $result[$k] = is_array($v) ? $this->resolveAllRefs($v) : $v;
+                    $result[$k] = is_array($v) ? $this->resolveAllRefs($v, $refDir) : $v;
                 }
 
                 return $result;

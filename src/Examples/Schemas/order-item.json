@@ -1,0 +1,28 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "description": "A single line item within an order",
+    "properties": {
+        "productId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        },
+        "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 2
+        },
+        "price": {
+            "type": "number",
+            "minimum": 0,
+            "example": 19.99
+        }
+    },
+    "required": [
+        "productId",
+        "quantity",
+        "price"
+    ],
+    "additionalProperties": false
+}

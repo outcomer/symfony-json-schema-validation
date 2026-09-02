@@ -134,7 +134,7 @@ curl -X POST http://localhost/api/users/register \
 **Response (400 Bad Request):**
 ```json
 {
-  "message": "Validation failed",
+  "message": "Request data is invalid",
   "errors": {
     "/body/name": [
       {
@@ -159,7 +159,9 @@ curl -X POST http://localhost/api/users/register \
 ```
 
 ::: warning Exception Handling Required
-The formatted JSON error response above requires setting up an exception listener. By default, Symfony will show a generic error page.
+The formatted JSON error response above requires setting up an exception listener in your own application. Without one, Symfony will show a generic error page for `HttpValidationException` on your own schemas.
+
+Note: this only applies to your own routes. The bundle's built-in `/_examples/validation/*` routes (enabled via `OUTCOMER_VALIDATION_ENABLE_EXAMPLES=true`) already ship with their own listener (`Examples/Subscriber/ExceptionListener`), so you'll see formatted JSON there even before setting up the listener below.
 
 **Setup Exception Listener:**
 
@@ -169,13 +171,13 @@ The formatted JSON error response above requires setting up an exception listene
 // src/Exception/Handler/ValidationExceptionHandler.php
 namespace App\Exception\Handler;
 
-use Outcomer\ValidationBundle\Exception\ValidationException;
+use Outcomer\ValidationBundle\Exception\HttpValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 class ValidationExceptionHandler
 {
-    public function handle(ValidationException $exception, ExceptionEvent $event): void
+    public function handle(HttpValidationException $exception, ExceptionEvent $event): void
     {
         $response = new JsonResponse(
             data: [
@@ -197,7 +199,7 @@ class ValidationExceptionHandler
 namespace App\EventListener;
 
 use App\Exception\Handler\ValidationExceptionHandler;
-use Outcomer\ValidationBundle\Exception\ValidationException;
+use Outcomer\ValidationBundle\Exception\HttpValidationException;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -213,7 +215,7 @@ class ExceptionListener
     {
         $exception = $event->getThrowable();
         
-        if ($exception instanceof ValidationException) {
+        if ($exception instanceof HttpValidationException) {
             $this->handler->handle($exception, $event);
         }
     }

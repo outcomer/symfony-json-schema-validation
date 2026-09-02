@@ -68,18 +68,18 @@ readonly class CreateUserDto implements ValidatedDtoInterface
     
     public static function fromPayload(Payload $payload, array $violations = []): static
     {
-        $data = $payload->getContent();
+        $data = $payload->getBody();
         
-        // Payload is already validated - safe to access nested arrays
+        // Payload is already validated - safe to access nested properties
         $address = new AddressDto(
-            $data['address']['street'],
-            $data['address']['city'],
-            $data['address']['zipCode']
+            $data->address->street,
+            $data->address->city,
+            $data->address->zipCode
         );
         
         return new static(
-            $data['name'],
-            $data['email'],
+            $data->name,
+            $data->email,
             $address,
             $violations
         );
@@ -132,12 +132,12 @@ readonly class CreateOrderDto implements ValidatedDtoInterface
     
     public static function fromPayload(Payload $payload, array $violations = []): static
     {
-        $data = $payload->getContent();
+        $data = $payload->getBody();
         
         return new static(
-            $data['customerId'],
-            $data['items'],
-            $data['totalAmount'],
+            $data->customerId,
+            $data->items,
+            $data->totalAmount,
             $violations
         );
     }
@@ -195,10 +195,10 @@ readonly class SearchProductsDto implements ValidatedDtoInterface
         $headers = $payload->getHeaders();
         
         return new static(
-            $query['query'],
-            $query['page'] ?? 1,
-            $query['limit'] ?? 20,
-            $headers['authorization'] ?? '',
+            $query->query,
+            $query->page ?? 1,
+            $query->limit ?? 20,
+            $headers->authorization ?? '',
             $violations
         );
     }
@@ -255,12 +255,12 @@ readonly class UpdateUserDto implements ValidatedDtoInterface
     
     public static function fromPayload(Payload $payload, array $violations = []): static
     {
-        $data = $payload->getContent();
+        $data = $payload->getBody();
         
         return new static(
-            $data['name'] ?? null,
-            $data['email'] ?? null,
-            $data['age'] ?? null,
+            $data->name ?? null,
+            $data->email ?? null,
+            $data->age ?? null,
             $violations
         );
     }
@@ -299,11 +299,11 @@ readonly class CreateUserDto implements ValidatedDtoInterface
     
     public static function fromPayload(Payload $payload, array $violations = []): static
     {
-        $data = $payload->getContent();
+        $data = $payload->getBody();
         
         return new static(
-            $data['name'],
-            UserRole::from($data['role']),
+            $data->name,
+            UserRole::from($data->role),
             $violations
         );
     }

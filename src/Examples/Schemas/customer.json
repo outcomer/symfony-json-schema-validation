@@ -1,0 +1,22 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "description": "A customer placing an order",
+    "properties": {
+        "name": {
+            "$ref": "name.json"
+        },
+        "email": {
+            "$ref": "email.json"
+        },
+        "shippingAddress": {
+            "$ref": "https://outcomer.dev/__examples_common__/address.json"
+        }
+    },
+    "required": [
+        "name",
+        "email",
+        "shippingAddress"
+    ],
+    "additionalProperties": false
+}

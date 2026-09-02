@@ -14,24 +14,26 @@ namespace Outcomer\ValidationBundle\Exception;
 
 use Opis\JsonSchema\Errors\ErrorFormatter;
 use Opis\JsonSchema\Errors\ValidationError;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use RuntimeException;
 use Throwable;
 
 /**
- * Exception thrown when JSON Schema validation fails
+ * Domain exception thrown when JSON Schema validation fails.
+ *
+ * Deliberately not tied to HTTP - see HttpValidationException for the
+ * HTTP-transport wrapper used by MapRequestResolver.
  */
-final class ValidationException extends HttpException
+final class ValidationException extends RuntimeException
 {
     private array $validationErrors;
 
     /**
      * Creates validation exception from OPIS validation error
      */
-    public function __construct(ValidationError $error, int $statusCode = Response::HTTP_BAD_REQUEST, ?Throwable $previous = null)
+    public function __construct(ValidationError $error, ?Throwable $previous = null)
     {
         $this->validationErrors = $this->reportResult($error);
-        parent::__construct(statusCode: $statusCode, message: 'Request data is invalid', previous: $previous);
+        parent::__construct('Request data is invalid', 0, $previous);
     }
 
     /**

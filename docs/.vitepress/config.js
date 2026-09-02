@@ -1,8 +1,8 @@
-import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 
 const REPO_NAME = 'symfony-json-schema-validation'
 
-export default defineConfig({
+export default withMermaid({
   title: 'JSON Schema Validation',
   description: 'Single Source of Truth for Symfony API contracts with JSON Schema validation and automatic OpenAPI documentation',
   base: `/${REPO_NAME}/`,
@@ -14,14 +14,19 @@ export default defineConfig({
   ignoreDeadLinks: false,
   lastUpdated: true,
 
+  vite: {
+    optimizeDeps: {
+      include: ['mermaid']
+    }
+  },
+
   themeConfig: {
     logo: { src: '/logo.svg', alt: 'Symfony JSON Schema Validation' },
 
     nav: [
       { text: 'Guide', link: '/guide/how-it-works' },
       { text: 'Examples', link: '/guide/examples' },
-      { text: 'API', link: '/guide/api' },
-      { text: 'GitHub', link: `https://github.com/outcomer/${REPO_NAME}` }
+      { text: 'API', link: '/guide/api' }
     ],
 
     sidebar: [

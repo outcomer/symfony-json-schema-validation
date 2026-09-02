@@ -38,13 +38,18 @@ public function createUser(#[MapRequest('user-create.json')] UserCreateDto $user
 
 ### ValidatedDtoInterface
 
-Marker interface for DTOs that receive validated data.
+Interface for DTOs that receive validated data. Implementations are built via `fromPayload()`, and expose whether validation succeeded.
 
 ```php
 namespace Outcomer\ValidationBundle\Model;
 
 interface ValidatedDtoInterface
 {
+    public static function fromPayload(Payload $payload, array $violations = []): static;
+
+    public function isValid(): bool;
+
+    public function getViolations(): array;
 }
 ```
 
@@ -63,11 +68,11 @@ readonly class UserCreateDto implements ValidatedDtoInterface
     
     public static function fromPayload(Payload $payload, array $violations = []): static
     {
-        $data = $payload->getContent();
+        $data = $payload->getBody();
         
         return new static(
-            $data['name'],
-            $data['email'],
+            $data->name,
+            $data->email,
             $violations
         );
     }
@@ -141,34 +146,32 @@ Use in schema:
   }
 }
 ```
-```
 
 ## Models
 
 ### ValidatedRequest
 
-Default model containing validated request data.
+Default DTO containing the validated payload and validation results. Used as the controller argument type when you don't need a custom DTO.
 
 ```php
 namespace Outcomer\ValidationBundle\Model;
 
-class ValidatedRequest
+class ValidatedRequest implements ValidatedDtoInterface
 {
-    public function getPayload(): ValidatedPayload;
-    public function getBody(): mixed;
-    public function getQuery(): mixed;
-    public function getPath(): mixed;
-    public function getHeaders(): mixed;
+    public function getPayload(): Payload;
+    public function getViolations(): array;
+    public function hasViolations(): bool;
+    public function isValid(): bool;
+    public function getStatus(): ValidationStatus;
 }
 ```
 
 **Methods:**
 
-- `getPayload()`: Returns full validated payload object
-- `getBody()`: Returns validated request body
-- `getQuery()`: Returns validated query parameters
-- `getPath()`: Returns validated path parameters
-- `getHeaders()`: Returns validated headers
+- `getPayload()`: Returns the validated `Payload` (body, query, path, headers)
+- `getViolations()`: Returns validation violations, if any
+- `hasViolations()` / `isValid()`: Whether validation failed/succeeded
+- `getStatus()`: Returns a `ValidationStatus` enum (`VALID` or `INVALID`)
 
 **Example:**
 
@@ -176,28 +179,30 @@ class ValidatedRequest
 #[Route('/api/users', methods: ['POST'])]
 public function createUser(#[MapRequest('user-create.json')] ValidatedRequest $request): JsonResponse
 {
-    $body = $request->getBody();
-    $query = $request->getQuery();
+    $body = $request->getPayload()->getBody();
+    $query = $request->getPayload()->getQuery();
     
     // ...
 }
 ```
 
-### ValidatedPayload
+### Payload
 
 Container for all validated request components.
 
 ```php
 namespace Outcomer\ValidationBundle\Model;
 
-class ValidatedPayload
+final class Payload
 {
-    public function getBody(): mixed;
-    public function getQuery(): mixed;
-    public function getPath(): mixed;
-    public function getHeaders(): mixed;
+    public function getBody(): object|array|null;
+    public function getQuery(): object;
+    public function getPath(): object;
+    public function getHeaders(): object;
 }
 ```
+
+`getQuery()`, `getPath()` and `getHeaders()` always return an object (property access, e.g. `$payload->getQuery()->page`). `getBody()` can be an object, array, or null depending on the schema and request body.
 
 ## Configuration
 
@@ -208,34 +213,51 @@ Full configuration reference:
 ```yaml
 # config/packages/outcomer_validation.yaml
 outcomer_validation:
-    # Directory containing JSON Schema files
-    schemas_path: '%kernel.project_dir%/config/validation/schemas'
-    
-    # Base URL for schema references (optional)
-    schema_domain: 'https://api.example.com/schemas'
-    
-    # Custom filters for data preprocessing
+    # Path/domain pairs for your JSON Schema files (schemas_path/schema_domain are deprecated since 4.0)
+    schemas:
+        - path: '%kernel.project_dir%/config/validation/schemas'
+          domain: 'https://api.example.com/schemas'
+
+    # Automatically cast numeric/boolean strings before validation
+    auto_cast_query: true
+    auto_cast_path: true
+
+    # Custom filters for dynamic (non-static) validation rules
     filters:
-        trim: App\Filter\TrimFilter
-        lowercase: App\Filter\LowercaseFilter
+        unique_email: App\Filter\UniqueEmailFilter
 ```
 
 ## Exceptions
 
 ### ValidationException
 
-Thrown when request validation fails.
+Domain exception thrown internally when request validation fails. Not tied to HTTP - see `HttpValidationException` below for the HTTP-transport wrapper.
 
 ```php
 namespace Outcomer\ValidationBundle\Exception;
 
 class ValidationException extends \RuntimeException
 {
-    public function getViolations(): array;
+    public function getValidationErrors(): array;
 }
 ```
 
-**Structure of violations:**
+### HttpValidationException
+
+HTTP-transport wrapper thrown by `MapRequestResolver` (when `#[MapRequest]`'s `triggerResponse` is `true`, the default). Wraps the domain `ValidationException`.
+
+```php
+namespace Outcomer\ValidationBundle\Exception;
+
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
+final class HttpValidationException extends HttpException
+{
+    public function getValidationErrors(): array;
+}
+```
+
+**Structure of validation errors:**
 
 ```php
 [
@@ -258,13 +280,13 @@ class ValidationException extends \RuntimeException
 
 ### Custom Exception Listener
 
-The bundle **does not** automatically convert exceptions to JSON. You must create an event listener:
+The bundle **does not** automatically convert exceptions to JSON. You must create an event listener for `HttpValidationException`:
 
 ```php
 // src/EventListener/ExceptionListener.php
 namespace App\EventListener;
 
-use Outcomer\ValidationBundle\Exception\ValidationException;
+use Outcomer\ValidationBundle\Exception\HttpValidationException;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -277,7 +299,7 @@ class ExceptionListener
     {
         $exception = $event->getThrowable();
         
-        if ($exception instanceof ValidationException) {
+        if ($exception instanceof HttpValidationException) {
             $response = new JsonResponse(
                 data: [
                     'message' => $exception->getMessage(),
@@ -296,7 +318,7 @@ class ExceptionListener
 
 ```json
 {
-  "message": "Validation failed",
+  "message": "Request data is invalid",
   "errors": {
     "/body/email": [
       {
@@ -327,8 +349,8 @@ namespace Outcomer\ValidationBundle\Schema;
 
 class SchemaValidator
 {
-    public function validate(array $data, array $schema): void;
-    public function validateBySchemaFile(mixed $data, string $schemaPath): void;
+    public function validate(mixed $data, array $schema): void;
+    public function validateFileSchema(mixed $data, string $schemaPath): void;
 }
 ```
 
@@ -345,7 +367,7 @@ class CustomService
     
     public function validateCustomData(array $data, string $schemaPath): void
     {
-        $this->validator->validateBySchemaFile($data, $schemaPath);
+        $this->validator->validateFileSchema($data, $schemaPath);
     }
 }
 ```
@@ -368,7 +390,7 @@ class CustomService
 
 | Bundle Version | PHP Version | Symfony Version | JSON Schema Draft |
 |---------------|-------------|-----------------|-------------------|
-| 1.x | >= 8.4 | >= 8.0 | 2020-12, 2019-09, 07 |
+| 4.x | >= 8.2 | ^7.4 \| ^8.0 | 2020-12, 2019-09, 07 |
 
 ## Credits
 

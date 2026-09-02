@@ -37,6 +37,22 @@ final class ConfigurationTest extends TestCase
 		$this->assertSame('https://outcomer.dev', $config['schema_domain']);
 		$this->assertIsArray($config['filters']);
 		$this->assertEmpty($config['filters']);
+		$this->assertTrue($config['auto_cast_query']);
+		$this->assertTrue($config['auto_cast_path']);
+	}
+
+	public function testAutoCastFlagsCanBeDisabledIndependently(): void
+	{
+		$configs = [
+			'outcomer_validation' => [
+				'auto_cast_query' => false,
+			],
+		];
+
+		$config = $this->processor->processConfiguration($this->configuration, $configs);
+
+		$this->assertFalse($config['auto_cast_query']);
+		$this->assertTrue($config['auto_cast_path']);
 	}
 
 	public function testCustomConfiguration(): void

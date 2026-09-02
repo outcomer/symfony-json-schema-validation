@@ -1,0 +1,7 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "type": "string",
+    "format": "email",
+    "description": "An email address",
+    "example": "john.doe@example.com"
+}

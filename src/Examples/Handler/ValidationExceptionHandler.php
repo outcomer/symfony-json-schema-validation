@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace Outcomer\ValidationBundle\Examples\Handler;
 
-use Outcomer\ValidationBundle\Exception\ValidationException;
+use Outcomer\ValidationBundle\Exception\HttpValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 /**
- * Example exception handler for ValidationException
+ * Example exception handler for HttpValidationException
  *
  * This is an example implementation showing how to handle validation exceptions
  * in your application. Copy this to your src/Exception/Handler/ directory and
@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
  */
 class ValidationExceptionHandler
 {
-    public function handleValidationBundleException(ValidationException $exception, ExceptionEvent $event): void
+    public function handleValidationBundleException(HttpValidationException $exception, ExceptionEvent $event): void
     {
         $errors = $exception->getValidationErrors();
 

@@ -69,7 +69,7 @@ composer require outcomer/symfony-json-schema-validation
 ### Basic Usage
 
 ```php
-use Outcomer\Bundle\SymfonyJsonSchemaValidation\Attribute\MapRequest;
+use Outcomer\ValidationBundle\Attribute\MapRequest;
 
 class UserController
 {

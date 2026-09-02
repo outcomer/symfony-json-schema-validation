@@ -34,11 +34,11 @@ features:
   
   - icon: 🎯
     title: Modern Symfony
-    details: Built for Symfony 8.0+ and PHP 8.4+ with full support for attributes and modern PHP features.
+    details: Built for Symfony 7.4+ and PHP 8.2+ with full support for attributes and modern PHP features.
   
   - icon: ⚡
     title: High Performance
-    details: Optimized validation with OPIS JSON Schema library and intelligent caching mechanisms.
+    details: Validation powered by the OPIS JSON Schema library, with no shared state between requests.
   
   - icon: 🧩
     title: Extensible

@@ -39,7 +39,7 @@ class ExampleValidationController extends AbstractController
         summary: 'Validate user',
     )]
     #[Route('/user', name: '_example_validation_user', methods: ['POST'])]
-    public function validateUser(#[MapRequest('../../../vendor/outcomer/symfony-json-schema-validation/src/Examples/Schemas/user-create.json')] ValidatedRequest $request): JsonResponse
+    public function validateUser(#[MapRequest(__DIR__.'/../Schemas/user-create.json')] ValidatedRequest $request): JsonResponse
     {
         $payload = $request->getPayload();
         $body    = $payload->getBody();
@@ -61,7 +61,7 @@ class ExampleValidationController extends AbstractController
         summary: 'DTO injection',
     )]
     #[Route('/user-dto', name: '_example_validation_user_dto', methods: ['POST'])]
-    public function validateUserDto(#[MapRequest('../../../vendor/outcomer/symfony-json-schema-validation/src/Examples/Schemas/user-create.json')] UserApiDtoRequest $dto): JsonResponse
+    public function validateUserDto(#[MapRequest(__DIR__.'/../Schemas/user-create.json')] UserApiDtoRequest $dto): JsonResponse
     {
         return $this->json([
             'success' => true,
@@ -80,7 +80,7 @@ class ExampleValidationController extends AbstractController
         summary: 'Create profile',
     )]
     #[Route('/profile', name: '_example_validation_profile', methods: ['POST'])]
-    public function createProfile(#[MapRequest('../../../vendor/outcomer/symfony-json-schema-validation/src/Examples/Schemas/user-create.json')] UserApiDtoRequest $profile): JsonResponse
+    public function createProfile(#[MapRequest(__DIR__.'/../Schemas/user-create.json')] UserApiDtoRequest $profile): JsonResponse
     {
         return $this->json([
             'success' => true,
@@ -120,7 +120,7 @@ class ExampleValidationController extends AbstractController
         ]
     )]
     #[Route('/api-user', name: '_example_validation_api_user', methods: ['POST'])]
-    public function createUserWithDocs(#[MapRequest('../../../vendor/outcomer/symfony-json-schema-validation/src/Examples/Schemas/user-create.json')] UserApiDtoRequest $user): JsonResponse
+    public function createUserWithDocs(#[MapRequest(__DIR__.'/../Schemas/user-create.json')] UserApiDtoRequest $user): JsonResponse
     {
         $userData = UserApiDtoResponse::fromArray([
             'name'  => $user->name,
@@ -129,6 +129,23 @@ class ExampleValidationController extends AbstractController
         ]);
 
         return $this->json($userData, 200);
+    }
+
+    #[OA\Post(
+        operationId: 'createOrder',
+        summary: 'Create order (nested schemas)',
+        description: 'Demonstrates multi-level $ref nesting: order -> customer -> name/email (relative) and order -> customer -> shippingAddress (absolute, separately registered domain) -> country (relative), plus an array of order items (relative).',
+    )]
+    #[Route('/order', name: '_example_validation_order', methods: ['POST'])]
+    public function createOrder(#[MapRequest(__DIR__.'/../Schemas/order-create.json')] ValidatedRequest $request): JsonResponse
+    {
+        $body = $request->getPayload()->getBody();
+
+        return $this->json([
+            'success' => true,
+            'message' => 'Order is valid',
+            'data'    => $body,
+        ], 201);
     }
 
     #[OA\Get(
@@ -145,6 +162,7 @@ class ExampleValidationController extends AbstractController
                 'POST /_examples/validation/user-dto' => 'Validate with automatic DTO injection (via fromPayload)',
                 'POST /_examples/validation/profile'  => 'Another DTO injection example',
                 'POST /_examples/validation/api-user' => 'OpenAPI documented endpoint with validation',
+                'POST /_examples/validation/order'    => 'Multi-level nested schemas: relative and absolute $ref',
             ],
             'features'  => [
                 'body validation'    => 'JSON request body validation',

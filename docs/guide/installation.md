@@ -2,8 +2,8 @@
 
 ## Requirements
 
-- PHP 8.4 or higher
-- Symfony 8.0 or higher
+- PHP 8.2 or higher
+- Symfony 7.4 or 8.0
 - Composer
 
 ## Install via Composer
@@ -31,19 +31,18 @@ Create a configuration file to customize the bundle settings:
 ```yaml
 # config/packages/outcomer_validation.yaml
 outcomer_validation:
-    schemas_path: '%kernel.project_dir%/config/validation/schemas'
-    schema_domain: 'https://your-domain.com/schemas'
+    schemas:
+        - path: '%kernel.project_dir%/config/validation/schemas'
+          domain: 'https://your-domain.com/schemas'
     filters:
-        trim: Outcomer\ValidationBundle\Filter\TrimFilter
-        lowercase: Outcomer\ValidationBundle\Filter\LowercaseFilter
+        unique_email: App\Filter\UniqueEmailFilter
 ```
 
 ### Configuration Options
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `schemas_path` | `%kernel.project_dir%/config/validation/schemas` | Directory containing JSON schema files |
-| `schema_domain` | `null` | Base URL for schema references |
+| `schemas` | `[]` | Path/domain pairs for JSON schema files - see [Configuration](./configuration#schemas) |
 | `filters` | `{}` | Custom data filters for preprocessing |
 
 ## Directory Structure

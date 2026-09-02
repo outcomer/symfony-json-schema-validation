@@ -9,8 +9,9 @@ Create or update your bundle configuration file:
 ```yaml
 # config/packages/outcomer_validation.yaml
 outcomer_validation:
-    schemas_path: '%kernel.project_dir%/config/validation/schemas'
-    schema_domain: 'https://your-domain.com/schemas'
+    schemas:
+        - path: '%kernel.project_dir%/config/validation/schemas'
+          domain: 'https://your-domain.com/schemas'
     filters:
         unique_email: App\Filter\UniqueEmailFilter
         valid_promo_code: App\Filter\PromoCodeFilter
@@ -18,28 +19,48 @@ outcomer_validation:
 
 ## Configuration Reference
 
-### schemas_path
+### schemas
 
-**Type:** `string`  
-**Default:** `%kernel.project_dir%/config/validation/schemas`
+**Type:** `array` of `{path, domain}`  
+**Default:** `[]`
 
-Directory where your JSON Schema files are stored.
+Path/domain pairs to register. Each pair works the same way `schemas_path`/`schema_domain` used to: `path` is a directory of JSON Schema files, `domain` is the base URL used to build their auto-generated schema IDs (and to resolve `$ref` inside them). Register more than one pair if you have schemas in more than one directory - e.g. one for your app's own schemas, another for a shared/vendored set.
 
 ```yaml
 outcomer_validation:
-    schemas_path: '%kernel.project_dir%/schemas'
+    schemas:
+        - path: '%kernel.project_dir%/config/validation/schemas'
+          domain: 'https://api.example.com/schemas'
+        - path: '%kernel.project_dir%/config/validation/shared-schemas'
+          domain: 'https://api.example.com/shared-schemas'
 ```
 
-### schema_domain
+::: warning Deprecated: schemas_path / schema_domain
+The single-pair `schemas_path` and `schema_domain` options are deprecated as of 4.0 in favor of `schemas`. They still work today but will be removed in a future major version - migrate by wrapping your existing values into a single `schemas` entry, as shown above.
+:::
 
-**Type:** `string|null`  
-**Default:** `null`
+### auto_cast_query
 
-Base URL for schema references. Useful when you have external schema references.
+**Type:** `bool`
+**Default:** `true`
+
+Automatically casts numeric/boolean-looking strings in query parameters (e.g. `"20"` → `20`) before validation, so schemas can use `"type": "integer"` for query params without every client having to send real JSON types.
 
 ```yaml
 outcomer_validation:
-    schema_domain: 'https://api.example.com/schemas'
+    auto_cast_query: false
+```
+
+### auto_cast_path
+
+**Type:** `bool`
+**Default:** `true`
+
+Same casting behavior as `auto_cast_query`, applied to route path parameters. Headers are never auto-cast.
+
+```yaml
+outcomer_validation:
+    auto_cast_path: false
 ```
 
 ### filters
@@ -232,13 +253,13 @@ outcomer_validation:
 
 ## Error Handling
 
-The bundle throws `ValidationException` when validation fails. To format it as JSON response, you need to set up an exception listener:
+The bundle throws a domain `ValidationException` internally; when `#[MapRequest]`'s `triggerResponse` is `true` (the default), `MapRequestResolver` wraps it into `HttpValidationException` before throwing. To format it as a JSON response, you need to set up an exception listener for `HttpValidationException`:
 
 ```php
 // src/EventListener/ExceptionListener.php
 namespace App\EventListener;
 
-use Outcomer\ValidationBundle\Exception\ValidationException;
+use Outcomer\ValidationBundle\Exception\HttpValidationException;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -251,7 +272,7 @@ class ExceptionListener
     {
         $exception = $event->getThrowable();
         
-        if ($exception instanceof ValidationException) {
+        if ($exception instanceof HttpValidationException) {
             $response = new JsonResponse(
                 data: [
                     'message' => $exception->getMessage(),
@@ -270,7 +291,7 @@ class ExceptionListener
 
 ```json
 {
-  "message": "Validation failed",
+  "message": "Request data is invalid",
   "errors": {
     "/body/email": [
       {

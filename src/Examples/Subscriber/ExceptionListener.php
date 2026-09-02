@@ -13,19 +13,20 @@ declare(strict_types=1);
 namespace Outcomer\ValidationBundle\Examples\Subscriber;
 
 use Outcomer\ValidationBundle\Examples\Handler\ValidationExceptionHandler;
-use Outcomer\ValidationBundle\Exception\ValidationException;
+use Outcomer\ValidationBundle\Exception\HttpValidationException;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * Example event subscriber for handling ValidationException
+ * Example event subscriber for handling HttpValidationException
  *
  * This is an example implementation showing how to catch and handle validation
  * exceptions in your Symfony application. Copy this to your src/Subscriber/
  * directory and adjust the namespace to App\Subscriber.
  *
- * The subscriber catches ValidationException and delegates handling to the
+ * The subscriber catches HttpValidationException (the HTTP-transport wrapper
+ * thrown by MapRequestResolver) and delegates handling to the
  * ValidationExceptionHandler, which formats the error response as JSON.
  */
 #[AsEventListener(event: KernelEvents::EXCEPTION, method: 'handleException', priority: 0)]
@@ -43,7 +44,7 @@ class ExceptionListener
         $exception = $event->getThrowable();
 
         match (true) {
-            $exception instanceof ValidationException  => $this->validationBundleHandler->handleValidationBundleException($exception, $event),
+            $exception instanceof HttpValidationException => $this->validationBundleHandler->handleValidationBundleException($exception, $event),
             default => null,
         };
     }

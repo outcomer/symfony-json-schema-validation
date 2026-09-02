@@ -12,77 +12,17 @@ declare(strict_types=1);
 
 namespace Outcomer\ValidationBundle\Helpers;
 
-use stdClass;
-
 /**
  * Helpers class
  */
 class Arrays
 {
     /**
-     * Array inserter.
-     *
-     * @param array   $array Target array.
-     * @param integer $index Index in destination after which to insert.
-     * @param array   $value Data to insert at position.
+     * Converts an array (including nested arrays) into a stdClass object graph.
      */
-    public static function insertInArray(array $array, int $index, array $value): array
+    public static function toObjectGraph(array $data): object
     {
-        return array_slice($array, 0, $index, true) + $value + array_slice($array, $index, count($array) - $index, true);
-    }
-
-    /**
-     * Replace keys in array saving keys order.
-     * Recursive.
-     *
-     * @param array $array Original array.
-     */
-    public static function toObject(array $array): stdClass
-    {
-        return json_decode(json_encode($array));
-    }
-
-    /**
-     * Groups an array of associative arrays by some key in subarray.
-     *
-     * @param string $key  Property to sort by.
-     * @param array  $data Array that stores multiple associative arrays.
-     */
-    public static function groupBy(string $key, array $data): array
-    {
-        $result = [];
-
-        foreach ($data as $val) {
-            if (array_key_exists($key, $val)) {
-                $result[$val[$key]][] = $val;
-            } else {
-                $result[''][] = $val;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Replace keys in array saving keys order.
-     * Recursive.
-     *
-     * @param mixed $array       Original array.
-     * @param array $replacement Array containing old keys as keys and new keys as values.
-     */
-    public static function arrayReplaceKeys(mixed $array, array $replacement): array
-    {
-        if (is_array($array) && is_array($replacement)) {
-            $newOrderArray = [];
-            foreach ($array as $k => $v) {
-                $key                 = array_key_exists($k, $replacement) ? $replacement[$k] : $k;
-                $newOrderArray[$key] = is_array($v) ? self::arrayReplaceKeys($v, $replacement) : $v;
-            }
-
-            return $newOrderArray;
-        }
-
-        return $array;
+        return json_decode(json_encode($data), false);
     }
 
     /**

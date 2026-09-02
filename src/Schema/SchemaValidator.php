@@ -128,7 +128,7 @@ final class SchemaValidator
     private function registerSchemaFilters(Validator $validator, object $schema): void
     {
         $requiredFilters = $this->filterResolver->extract($schema);
-        $filterResolver   = $validator->parser()->getFilterResolver();
+        $filterResolver  = $validator->parser()->getFilterResolver();
 
         foreach ($requiredFilters as $filterName) {
             if (!$this->filterLocator->has($filterName)) {
